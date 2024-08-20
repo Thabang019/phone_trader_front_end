@@ -4,10 +4,25 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import com.google.gson.Gson;
+import okhttp3.*;
+import za.ac.cput.domain.Contact;
+import za.ac.cput.domain.Employee;
+import za.ac.cput.domain.Address;
+import za.ac.cput.factory.AddressFactory;
+import za.ac.cput.factory.ContactFactory;
+import za.ac.cput.factory.EmployeeFactory;
+
+
+import javax.swing.*;
+import java.io.IOException;
 
 public class Registration {
 
     private JPanel registration;
+    private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    private final OkHttpClient client = new OkHttpClient();
+    private final Gson gson = new Gson();
 
     public Registration() {
 
@@ -16,7 +31,7 @@ public class Registration {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
+
         JPanel personalPanel = new JPanel(new GridLayout(0, 2, 10, 10));
         personalPanel.setBorder(BorderFactory.createTitledBorder("Personal"));
 
@@ -98,20 +113,49 @@ public class Registration {
 
         buttonPanel.add(registerButton);
         buttonPanel.add(cancelButton);
-
         mainPanel.add(buttonPanel);
 
-
         registration.add(mainPanel, BorderLayout.CENTER);
-
 
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Registration Successful!");
+                try {
+                    String employeeId = empIdField.getText();
+                    String firstName = firstNameField.getText();
+                    String middleName = middleNameField.getText();
+                    String lastName = lastNameField.getText();
+                    String email = emailField.getText();
+                    String phone = phoneField.getText();
+                    String city = cityField.getText();
+                    String postalCode = postalCodeField.getText();
+                    String suburb = suburbField.getText();
+                    String streetNumber = streetNumberField.getText();
+                    String houseNumber = houseNumberField.getText();
+
+                    Address address = AddressFactory.buildAddress(houseNumber, streetNumber, suburb, city, postalCode);
+
+                    System.out.println(address);
+
+                    Contact contact = ContactFactory.createContact(phone, email, address);
+
+                    System.out.println(contact);
+
+                    Employee.Role role = sellerButton.isSelected() ? Employee.Role.ADMIN : Employee.Role.USER;
+
+                    Employee employee = EmployeeFactory.buildEmployee(Integer.parseInt(employeeId), firstName, middleName, lastName, "defaultPassword", contact, role);
+
+                    System.out.println(employee);
+
+                    String response = createEmployee("http://localhost:8080/phone-trader/employee/save", employee);
+
+                    JOptionPane.showMessageDialog(null, "Registration Successful! Server Response: " + response);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Registration Failed: " + ex.getMessage());
+                    ex.printStackTrace();
+                }
             }
         });
-
 
         cancelButton.addActionListener(new ActionListener() {
             @Override
@@ -130,12 +174,25 @@ public class Registration {
                 roleGroup.clearSelection();
             }
         });
-
-
     }
 
+    public String createEmployee(String url, Employee employee) throws IOException {
+        String json = gson.toJson(employee);
+        return post(url, json);
+    }
 
-    public JPanel getPanel () {
+    private String post(String url, String json) throws IOException {
+        RequestBody body = RequestBody.create(json, JSON);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        try (Response response = client.newCall(request).execute()) {
+            return response.body().string();
+        }
+    }
+
+    public JPanel getPanel() {
         return registration;
     }
 }

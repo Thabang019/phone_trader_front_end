@@ -9,7 +9,6 @@ public class Welcome {
 
         welcomePanel = new JPanel(new BorderLayout());
 
-
         JPanel leftPanel = new JPanel();
         leftPanel.setBackground(new Color(192, 0, 0));
         leftPanel.setLayout(new GridBagLayout());

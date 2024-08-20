@@ -18,6 +18,19 @@ public class ContactFactory {
                 .setAddress(address)
                 .build();
     }
+
+    public static Contact createContact(String phoneNumber, String email, Address address) {
+        if (!Helper.isValidEmail(email) || Helper.isNullorEmpty(phoneNumber) ||
+                Helper.isObjectNull(address))
+            return null;
+
+        return new Contact.Builder()
+                .setEmail(email)
+                .setPhoneNumber(phoneNumber)
+                .setAltPhoneNumber(" ")
+                .setAddress(address)
+                .build();
+    }
 }
 
 

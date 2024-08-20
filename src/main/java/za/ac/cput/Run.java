@@ -17,18 +17,19 @@ public class Run {
     public Run() {
         frame = new JFrame("Phone Trader Application");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        frame.setSize(1600, 400);
 
         welcome = new Welcome();
         login =  new Login();
         registration = new Registration();
         frame.add(registration.getPanel());
         frame.pack();
-        frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
 
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 
+    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new Run();
