@@ -1,16 +1,38 @@
 package za.ac.cput;
 
-import za.ac.cput.views.UserInterface;
+import za.ac.cput.views.Login;
+import za.ac.cput.views.Registration;
+import za.ac.cput.views.Welcome;
 
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 public class Run {
-        public static void main(String[] args) {
-            UserInterface guiObject = new UserInterface();
-            guiObject.pack();
-            guiObject.setSize(400, 400);
-            guiObject.setVisible(true);
-            guiObject.setDefaultCloseOperation(EXIT_ON_CLOSE);
-            guiObject.setGui();
-        }
+    private JFrame frame;
+    private Welcome welcome;
+    private Login login;
+    private Registration registration;
+
+    public Run() {
+        frame = new JFrame("Phone Trader Application");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+        welcome = new Welcome();
+        login =  new Login();
+        registration = new Registration();
+        frame.add(registration.getPanel());
+        frame.pack();
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new Run();
+        });
+
+    }
 }
