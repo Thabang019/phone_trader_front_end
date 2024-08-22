@@ -22,7 +22,8 @@ public class Run {
         welcome = new Welcome();
         login =  new Login();
         registration = new Registration();
-        frame.add(registration.getPanel());
+        frame.add(welcome.getPanel());
+        frame.setPreferredSize(new Dimension(1000,800));
         frame.pack();
 
         frame.setLocationRelativeTo(null);

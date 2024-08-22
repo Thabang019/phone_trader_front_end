@@ -55,11 +55,15 @@ public class Registration {
         JPanel rolePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JRadioButton sellerButton = new JRadioButton("Seller");
         JRadioButton buyerButton = new JRadioButton("Buyer");
+        JRadioButton managerButton = new JRadioButton("Manager");
+
         ButtonGroup roleGroup = new ButtonGroup();
         roleGroup.add(sellerButton);
         roleGroup.add(buyerButton);
+        roleGroup.add(managerButton);
         rolePanel.add(sellerButton);
         rolePanel.add(buyerButton);
+        rolePanel.add(managerButton);
         personalPanel.add(rolePanel);
 
         mainPanel.add(personalPanel);
@@ -141,13 +145,15 @@ public class Registration {
 
                     System.out.println(contact);
 
-                    Employee.Role role = sellerButton.isSelected() ? Employee.Role.ADMIN : Employee.Role.USER;
+                    Employee.Role role = sellerButton.isSelected() ? Employee.Role.Manager : Employee.Role.Buyer;
 
                     Employee employee = EmployeeFactory.buildEmployee(Integer.parseInt(employeeId), firstName, middleName, lastName, "defaultPassword", contact, role);
 
                     System.out.println(employee);
 
                     String response = createEmployee("http://localhost:8080/phone-trader/employee/save", employee);
+
+                    System.out.println(response);
 
                     JOptionPane.showMessageDialog(null, "Registration Successful! Server Response: " + response);
                 } catch (Exception ex) {
@@ -156,6 +162,8 @@ public class Registration {
                 }
             }
         });
+
+
 
         cancelButton.addActionListener(new ActionListener() {
             @Override

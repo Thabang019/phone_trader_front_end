@@ -76,12 +76,7 @@ public class Login {
         loginPanel.add(rightPanel);
 
 
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-            }
-        });
+
 
 
         loginPanel.add(leftPanel, BorderLayout.WEST);
