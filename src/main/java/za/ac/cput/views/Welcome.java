@@ -2,6 +2,8 @@ package za.ac.cput.views;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Welcome {
     private JPanel welcomePanel;
@@ -57,6 +59,24 @@ public class Welcome {
         welcomePanel.add(leftPanel, BorderLayout.WEST);
         welcomePanel.add(rightPanel, BorderLayout.CENTER);
 
+
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openLogin();
+
+            }
+        });
+    }
+    private void openLogin() {
+        JFrame frame = new JFrame("Phone Trader Application");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Login loginForm = new Login();
+        frame.add(loginForm.getPanel());
+        frame.setPreferredSize(new Dimension(1000,800));
+        frame.pack();
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
     }
 
     public JPanel getPanel() {

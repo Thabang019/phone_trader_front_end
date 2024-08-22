@@ -13,8 +13,9 @@ public class Employee {
     private Role role;
     public Employee() {}
     public enum Role {
-        ADMIN,
-        USER,
+        Manager,
+        Salesperson,
+        Buyer,
     }
 
     private Employee(Builder builder) {
