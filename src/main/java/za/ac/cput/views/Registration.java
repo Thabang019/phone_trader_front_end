@@ -17,6 +17,14 @@ import za.ac.cput.factory.EmployeeFactory;
 import javax.swing.*;
 import java.io.IOException;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import okhttp3.*;
+import com.google.gson.Gson;
+
 public class Registration {
 
     private JPanel registration;
@@ -25,8 +33,6 @@ public class Registration {
     private final Gson gson = new Gson();
 
     public Registration() {
-
-
         registration = new JPanel(new BorderLayout());
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -106,7 +112,6 @@ public class Registration {
 
         mainPanel.add(addressPanel);
 
-
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton registerButton = new JButton("REGISTER");
         registerButton.setBackground(Color.RED);
@@ -145,7 +150,20 @@ public class Registration {
 
                     System.out.println(contact);
 
-                    Employee.Role role = sellerButton.isSelected() ? Employee.Role.Manager : Employee.Role.Buyer;
+                    Employee.Role role = null;
+
+                    if (sellerButton.isSelected()) {
+                        role = Employee.Role.Salesperson;
+                    } else if (buyerButton.isSelected()) {
+                        role = Employee.Role.Buyer;
+                    } else if (managerButton.isSelected()) {
+                        role = Employee.Role.Manager;
+                    }
+
+                    if (role == null) {
+                        JOptionPane.showMessageDialog(null, "Please select a role for the employee.");
+                        return;
+                    }
 
                     Employee employee = EmployeeFactory.buildEmployee(Integer.parseInt(employeeId), firstName, middleName, lastName, "defaultPassword", contact, role);
 
@@ -162,8 +180,6 @@ public class Registration {
                 }
             }
         });
-
-
 
         cancelButton.addActionListener(new ActionListener() {
             @Override
