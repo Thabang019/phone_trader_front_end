@@ -9,6 +9,7 @@ import okhttp3.*;
 import za.ac.cput.domain.Contact;
 import za.ac.cput.domain.Employee;
 import za.ac.cput.domain.Address;
+import za.ac.cput.dto.TokenStorage;
 import za.ac.cput.factory.AddressFactory;
 import za.ac.cput.factory.ContactFactory;
 import za.ac.cput.factory.EmployeeFactory;
@@ -16,14 +17,6 @@ import za.ac.cput.factory.EmployeeFactory;
 
 import javax.swing.*;
 import java.io.IOException;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import okhttp3.*;
-import com.google.gson.Gson;
 
 public class Registration {
 
@@ -33,6 +26,8 @@ public class Registration {
     private final Gson gson = new Gson();
 
     public Registration() {
+
+
         registration = new JPanel(new BorderLayout());
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -112,6 +107,7 @@ public class Registration {
 
         mainPanel.add(addressPanel);
 
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton registerButton = new JButton("REGISTER");
         registerButton.setBackground(Color.RED);
@@ -164,7 +160,6 @@ public class Registration {
                         JOptionPane.showMessageDialog(null, "Please select a role for the employee.");
                         return;
                     }
-
                     Employee employee = EmployeeFactory.buildEmployee(Integer.parseInt(employeeId), firstName, middleName, lastName, "defaultPassword", contact, role);
 
                     System.out.println(employee);
@@ -173,13 +168,15 @@ public class Registration {
 
                     System.out.println(response);
 
-                    JOptionPane.showMessageDialog(null, "Registration Successful! Server Response: " + response);
+                    JOptionPane.showMessageDialog(null, "Registration Successful!");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Registration Failed: " + ex.getMessage());
                     ex.printStackTrace();
                 }
             }
         });
+
+
 
         cancelButton.addActionListener(new ActionListener() {
             @Override
@@ -206,9 +203,11 @@ public class Registration {
     }
 
     private String post(String url, String json) throws IOException {
+        String token = TokenStorage.getInstance().getToken();
         RequestBody body = RequestBody.create(json, JSON);
         Request request = new Request.Builder()
                 .url(url)
+                .header("Authorization", "Bearer " + token)
                 .post(body)
                 .build();
         try (Response response = client.newCall(request).execute()) {
