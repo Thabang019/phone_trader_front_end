@@ -10,9 +10,7 @@ public class Sale {
     private Long salesID;
     private LocalDate date;
     private LocalTime time;
-
     private Employee employee;
-    private Buyer buyer;
     private Phone phone;
     private String paymentMethod;
     private double amountPaid;

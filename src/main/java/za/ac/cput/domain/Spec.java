@@ -2,7 +2,7 @@ package za.ac.cput.domain;
 
 import java.util.Objects;
 
-public class Specification {
+public class Spec {
 
     private Long id;
     private double screenSize;
@@ -16,10 +16,10 @@ public class Specification {
     private String waterResistance;
     private String wirelessCharging;
 
-    protected Specification() {
+    protected Spec() {
     }
 
-    private Specification(Builder builder ) {
+    private Spec(Builder builder ) {
         this.id = builder.id;
         this.screenSize = builder.screenSize;
         this.storage = builder.storage;
@@ -81,7 +81,7 @@ public class Specification {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Specification that = (Specification) o;
+        Spec that = (Spec) o;
         return Double.compare(screenSize, that.screenSize) == 0 && numOfSims == that.numOfSims && Objects.equals(id, that.id) && Objects.equals(storage, that.storage) && Objects.equals(ram, that.ram) && Objects.equals(operatingSystem, that.operatingSystem) && Objects.equals(camera, that.camera) && Objects.equals(microSD, that.microSD) && Objects.equals(fingerPrint, that.fingerPrint) && Objects.equals(waterResistance, that.waterResistance) && Objects.equals(wirelessCharging, that.wirelessCharging);
     }
 
@@ -92,7 +92,7 @@ public class Specification {
 
     @Override
     public String toString() {
-        return "Specification{" +
+        return "Spec{" +
                 "id=" + id +
                 ", screenSize=" + screenSize +
                 ", storage='" + storage + '\'' +
@@ -177,7 +177,7 @@ public class Specification {
             return this;
         }
 
-        public Builder copy(Specification specification){
+        public Builder copy(Spec specification){
             this.id = specification.id;
             this.screenSize = specification.screenSize;
             this.storage = specification.storage;
@@ -192,8 +192,8 @@ public class Specification {
             return this;
         }
 
-        public Specification build(){
-            return new Specification(this);
+        public Spec build(){
+            return new Spec(this);
         }
     }
 }

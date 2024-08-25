@@ -16,7 +16,7 @@ public class Phone {
 
     private String status;
 
-    private Specification specification;
+    private Spec specification;
 
     public Condition condition;
 
@@ -63,7 +63,7 @@ public class Phone {
         return status;
     }
 
-    public Specification getSpecification() {
+    public Spec getSpecification() {
         return specification;
     }
 
@@ -105,7 +105,7 @@ public class Phone {
         private String color;
         private double price;
         private String status;
-        private Specification specification;
+        private Spec specification;
         private Condition condition;
 
 
@@ -139,7 +139,7 @@ public class Phone {
             return this;
         }
 
-        public Builder setSpecification(Specification specification) {
+        public Builder setSpecification(Spec specification) {
             this.specification = specification;
             return this;
         }

@@ -9,6 +9,7 @@ import okhttp3.*;
 import za.ac.cput.domain.Contact;
 import za.ac.cput.domain.Employee;
 import za.ac.cput.domain.Address;
+import za.ac.cput.dto.TokenStorage;
 import za.ac.cput.factory.AddressFactory;
 import za.ac.cput.factory.ContactFactory;
 import za.ac.cput.factory.EmployeeFactory;
@@ -139,23 +140,15 @@ public class Registration {
 
                     Address address = AddressFactory.buildAddress(houseNumber, streetNumber, suburb, city, postalCode);
 
-                    System.out.println(address);
-
                     Contact contact = ContactFactory.createContact(phone, email, address);
-
-                    System.out.println(contact);
 
                     Employee.Role role = sellerButton.isSelected() ? Employee.Role.Manager : Employee.Role.Buyer;
 
                     Employee employee = EmployeeFactory.buildEmployee(Integer.parseInt(employeeId), firstName, middleName, lastName, "defaultPassword", contact, role);
 
-                    System.out.println(employee);
-
                     String response = createEmployee("http://localhost:8080/phone-trader/employee/save", employee);
 
-                    System.out.println(response);
-
-                    JOptionPane.showMessageDialog(null, "Registration Successful! Server Response: " + response);
+                    JOptionPane.showMessageDialog(null, "Registration Successful");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Registration Failed: " + ex.getMessage());
                     ex.printStackTrace();
@@ -190,9 +183,11 @@ public class Registration {
     }
 
     private String post(String url, String json) throws IOException {
+        String token = TokenStorage.getInstance().getToken();
         RequestBody body = RequestBody.create(json, JSON);
         Request request = new Request.Builder()
                 .url(url)
+                .header("Authorization", "Bearer " + token)
                 .post(body)
                 .build();
         try (Response response = client.newCall(request).execute()) {

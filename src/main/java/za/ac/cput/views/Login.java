@@ -1,12 +1,24 @@
 package za.ac.cput.views;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import okhttp3.*;
+import za.ac.cput.domain.Employee;
+import za.ac.cput.dto.JwtAuthenticationResponse;
+import za.ac.cput.dto.SignInRequest;
+import za.ac.cput.dto.TokenStorage;
+import za.ac.cput.factory.SignInRequestFactory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class Login {
 
-
+    private final OkHttpClient client = new OkHttpClient();
+    private Request requestSignIn, requestEmployee;
+    private final Gson gson = new Gson();
     private JPanel loginPanel;
     private JTextField usernameField;
     private JPasswordField passwordField;
@@ -76,7 +88,40 @@ public class Login {
         loginPanel.add(rightPanel);
 
 
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
+                SignInRequest signInRequest = SignInRequestFactory.createSignInRequest(Long.valueOf(usernameField.getText()), new String(passwordField.getPassword()));
+
+                try {
+                    JwtAuthenticationResponse response = sendPostRequest("http://localhost:8080/phone-trader/authentication/signin", signInRequest);
+                    String token = response.getToken();
+                    System.out.println(token);
+                    TokenStorage.getInstance().setToken(token);
+
+                    Employee employee = readEmployee("http://localhost:8080/phone-trader/employee/read/" + Long.valueOf(usernameField.getText()));
+                    System.out.println(employee);
+
+                    if(employee.getRole().equals(Employee.Role.Buyer)){
+                        openMerchantDashboard();
+                        //loginPanel.setVisible(false);
+
+                    } else if(employee.getRole().equals(Employee.Role.Salesperson)){
+                        openSalesPersonDashboard();
+                        //loginPanel.setVisible(false);
+
+                    }else {
+                        openManagerDashboard();
+                        //loginPanel.setVisible(false);
+                    }
+
+                } catch (IOException exception) {
+                    JOptionPane.showMessageDialog(null, "Access Denied !");
+                    exception.printStackTrace();
+                }
+            }
+        });
 
 
         loginPanel.add(leftPanel, BorderLayout.WEST);
@@ -84,8 +129,74 @@ public class Login {
 
     }
 
+
+
     public JPanel getPanel() {
         return loginPanel;
     }
+
+    public JwtAuthenticationResponse sendPostRequest(String url, SignInRequest signInRequest) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonInputString = objectMapper.writeValueAsString(signInRequest);
+
+        RequestBody body = RequestBody.create(jsonInputString, MediaType.get("application/json; charset=utf-8"));
+        requestSignIn = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+
+        try (Response response = client.newCall(requestSignIn).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("Unexpected code " + response);
+            }
+            String responseBody = response.body().string();
+            return objectMapper.readValue(responseBody, JwtAuthenticationResponse.class);
+        }
+
+
+    }
+
+    public Employee readEmployee(String url) throws IOException {
+        String token = TokenStorage.getInstance().getToken();
+        requestEmployee = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + token)
+                .get()
+                .build();
+
+        try (Response response = client.newCall(requestEmployee).execute()) {
+            if (response.isSuccessful()) {
+                return gson.fromJson(response.body().string(), Employee.class);
+            } else {
+                throw new IOException("Unexpected code " + response);
+            }
+        }
+    }
+
+    private void openMerchantDashboard() {
+        //MerchantDashboard merchantDashboard = new MerchantDashboard();
+        //myFrame(registrationForm.getPanel());
+        ManagerDashboard managerDashboard = new ManagerDashboard();
+        myFrame(managerDashboard.getPanel());
+    }
+
+    private void openSalesPersonDashboard() {
+        Registration registrationForm = new Registration();
+        myFrame(registrationForm.getPanel());
+    }
+
+    private void openManagerDashboard() {
+        ManagerDashboard managerDashboard = new ManagerDashboard();
+        myFrame(managerDashboard.getPanel());
+    }
+
+    public void myFrame(JPanel panel) {
+        JFrame frame = new JFrame("Phone Trader Application");
+        frame.add(panel);
+        frame.pack();
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+    }
+
 
 }

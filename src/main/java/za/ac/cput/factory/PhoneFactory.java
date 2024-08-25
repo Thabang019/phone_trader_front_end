@@ -1,13 +1,13 @@
 package za.ac.cput.factory;
 
 import za.ac.cput.domain.Phone;
-import za.ac.cput.domain.Specification;
+import za.ac.cput.domain.Spec;
 
 public class PhoneFactory {
 
     public static Phone createPhone(long imei, String brand, String model,
                                     String color, double price,
-                                    String status, Specification specification,
+                                    String status, Spec specification,
                                     Phone.Condition condition){
 
         return new Phone.Builder()

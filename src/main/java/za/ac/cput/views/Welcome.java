@@ -64,7 +64,7 @@ public class Welcome {
             @Override
             public void actionPerformed(ActionEvent e) {
                 openLogin();
-
+                //welcomePanel.setVisible(false);
             }
         });
     }
