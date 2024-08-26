@@ -3,6 +3,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import okhttp3.*;
 import za.ac.cput.domain.Employee;
+import za.ac.cput.dto.EmployeeStorage;
 import za.ac.cput.dto.JwtAuthenticationResponse;
 import za.ac.cput.dto.SignInRequest;
 import za.ac.cput.dto.TokenStorage;
@@ -101,7 +102,7 @@ public class Login {
                     TokenStorage.getInstance().setToken(token);
 
                     Employee employee = readEmployee("http://localhost:8080/phone-trader/employee/read/" + Long.valueOf(usernameField.getText()));
-                    System.out.println(employee);
+                    EmployeeStorage.getInstance().setEmployee(employee);
 
                     if(employee.getRole().equals(Employee.Role.Buyer)){
                         openMerchantDashboard();
