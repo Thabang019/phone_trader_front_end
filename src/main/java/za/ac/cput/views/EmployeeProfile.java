@@ -249,13 +249,16 @@ public class EmployeeProfile extends JPanel {
         panel.add(updatePasswordButton, gbc);
 
         updatePasswordButton.addActionListener(e -> {
-            String password = EmployeeStorage.getInstance().getEmployee().getPassword();
 
-            if(!passwordField.getPassword().equals(password)){
+            String password = EmployeeStorage.getInstance().getEmployee().getPassword();
+            String currentPassword = new String(passwordField.getPassword());
+
+            if(!currentPassword.equalsIgnoreCase(password)){
                 JOptionPane.showMessageDialog(panel, "Current Password Incorrect");
 
-            } else if (newPasswordField.getPassword() != confirmPasswordField.getPassword()){
+            } else if (!new String(newPasswordField.getPassword()).equalsIgnoreCase(new String(confirmPasswordField.getPassword()))){
                 JOptionPane.showMessageDialog(panel, "Password Does Not Match");
+
             } else {
                 updateEmployeePassword();
                 JOptionPane.showMessageDialog(panel, "Password Updated Successfully");
