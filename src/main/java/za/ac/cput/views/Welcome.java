@@ -22,7 +22,7 @@ public class Welcome {
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
 
-        JLabel descriptionLabel = new JLabel("<html>An application that will make <br> your gift-sending experience <br> even more memorable</html>");
+        JLabel descriptionLabel = new JLabel("Turn Old into Bold.");
         descriptionLabel.setForeground(Color.WHITE);
         descriptionLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
@@ -47,8 +47,10 @@ public class Welcome {
         JButton loginButton = new JButton("Login");
         loginButton.setBackground(new Color(192, 0, 0));
         loginButton.setForeground(Color.WHITE);
-        loginButton.setFont(new Font("Arial", Font.BOLD, 18));
-        loginButton.setPreferredSize(new Dimension(120, 40));
+        loginButton.setBorderPainted(false);
+        loginButton.setFocusPainted(false);
+        loginButton.setFont(new Font("Arial", Font.BOLD, 15));
+        loginButton.setPreferredSize(new Dimension(120, 35));
 
         gbc.gridy = 0;
         rightPanel.add(welcomeLabel, gbc);

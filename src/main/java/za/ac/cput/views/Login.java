@@ -3,6 +3,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import okhttp3.*;
 import za.ac.cput.domain.Employee;
+import za.ac.cput.dto.EmployeeStorage;
 import za.ac.cput.dto.JwtAuthenticationResponse;
 import za.ac.cput.dto.SignInRequest;
 import za.ac.cput.dto.TokenStorage;
@@ -52,7 +53,7 @@ public class Login {
         rightGbc.gridy = 0;
         rightGbc.gridwidth = 2;
         rightGbc.anchor = GridBagConstraints.CENTER;
-        JLabel userIcon = new JLabel(new ImageIcon("C:\\Users\\Okuhle.G\\OneDrive\\Pictures\\login"));  // Replace with the correct path to your user icon
+        JLabel userIcon = new JLabel(new ImageIcon("C:\\Users\\Okuhle.G\\OneDrive\\Pictures\\login"));
         rightPanel.add(userIcon, rightGbc);
 
         rightGbc.gridy++;
@@ -97,11 +98,14 @@ public class Login {
                 try {
                     JwtAuthenticationResponse response = sendPostRequest("http://localhost:8080/phone-trader/authentication/signin", signInRequest);
                     String token = response.getToken();
-                    System.out.println(token);
+                    System.out.println("Token Recieved");
                     TokenStorage.getInstance().setToken(token);
 
                     Employee employee = readEmployee("http://localhost:8080/phone-trader/employee/read/" + Long.valueOf(usernameField.getText()));
-                    System.out.println(employee);
+
+                    String password = new String(passwordField.getPassword());
+                    Employee newEmp = new Employee.Builder().copy(employee).setPassword(password).build();
+                    EmployeeStorage.getInstance().setEmployee(newEmp);
 
                     if(employee.getRole().equals(Employee.Role.Buyer)){
                         openMerchantDashboard();
