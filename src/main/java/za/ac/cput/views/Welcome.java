@@ -6,9 +6,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Welcome {
+    private JFrame welcomeFrame;
     private JPanel welcomePanel;
-    public Welcome(){
 
+    public JFrame Welcome() {
+        welcomeFrame = new JFrame();
         welcomePanel = new JPanel(new BorderLayout());
 
         JPanel leftPanel = new JPanel();
@@ -58,28 +60,27 @@ public class Welcome {
         welcomePanel.setLayout(new BorderLayout());
         welcomePanel.add(leftPanel, BorderLayout.WEST);
         welcomePanel.add(rightPanel, BorderLayout.CENTER);
+        welcomeFrame.add(welcomePanel);
+        welcomeFrame.setPreferredSize(new Dimension(1000, 800));
+        welcomeFrame.pack();
+        welcomeFrame.setVisible(true);
+        welcomeFrame.setLocationRelativeTo(null);
 
 
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 openLogin();
+                welcomeFrame.dispose();
                 //welcomePanel.setVisible(false);
             }
         });
-    }
-    private void openLogin() {
-        JFrame frame = new JFrame("Phone Trader Application");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Login loginForm = new Login();
-        frame.add(loginForm.getPanel());
-        frame.setPreferredSize(new Dimension(1000,800));
-        frame.pack();
-        frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
+        return welcomeFrame;
     }
 
-    public JPanel getPanel() {
-        return welcomePanel;
+    private void openLogin() {
+        Login loginForm = new Login();
+        loginForm.Login();
     }
+
 }

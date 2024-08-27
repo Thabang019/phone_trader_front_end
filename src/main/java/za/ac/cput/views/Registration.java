@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import com.google.gson.Gson;
+import kotlin.coroutines.jvm.internal.Boxing;
 import okhttp3.*;
 import za.ac.cput.domain.Contact;
 import za.ac.cput.domain.Employee;
@@ -19,14 +20,15 @@ import javax.swing.*;
 import java.io.IOException;
 
 public class Registration {
-
+private JFrame newFrame;
     private JPanel registration;
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private final OkHttpClient client = new OkHttpClient();
     private final Gson gson = new Gson();
 
-    public Registration() {
+    public JFrame Registration() {
 
+        newFrame = new JFrame();
 
         registration = new JPanel(new BorderLayout());
         JPanel mainPanel = new JPanel();
@@ -115,12 +117,21 @@ public class Registration {
         JButton cancelButton = new JButton("Cancel");
         cancelButton.setBackground(Color.RED);
         cancelButton.setForeground(Color.WHITE);
+        JButton backButton = new JButton("Back");
+        backButton.setBackground(Color.RED);
+        backButton.setForeground(Color.WHITE);
 
         buttonPanel.add(registerButton);
         buttonPanel.add(cancelButton);
+        buttonPanel.add(backButton);
         mainPanel.add(buttonPanel);
 
         registration.add(mainPanel, BorderLayout.CENTER);
+        newFrame.add(registration);
+        newFrame.setPreferredSize(new Dimension(1000,800));
+        newFrame.pack();
+        newFrame.setLocationRelativeTo(null);
+        newFrame.setVisible(true);
 
         registerButton.addActionListener(new ActionListener() {
             @Override
@@ -176,7 +187,14 @@ public class Registration {
             }
         });
 
+   backButton.addActionListener(new ActionListener() {
+       @Override
+       public void actionPerformed(ActionEvent actionEvent) {
+           managerDashboard();
+           newFrame.dispose();
 
+       }
+   });
 
         cancelButton.addActionListener(new ActionListener() {
             @Override
@@ -195,6 +213,7 @@ public class Registration {
                 roleGroup.clearSelection();
             }
         });
+        return newFrame;
     }
 
     public String createEmployee(String url, Employee employee) throws IOException {
@@ -214,8 +233,9 @@ public class Registration {
             return response.body().string();
         }
     }
+    private void managerDashboard() {
+        ManagerDashboard displayManagerDashboard = new ManagerDashboard();
+        displayManagerDashboard.ManagerDashboard();
 
-    public JPanel getPanel() {
-        return registration;
     }
 }

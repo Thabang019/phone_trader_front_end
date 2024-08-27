@@ -14,22 +14,16 @@ public class Run {
     private Welcome welcome;
 
     public Run() {
-        frame = new JFrame("Phone Trader Application");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1600, 400);
+
         welcome = new Welcome();
-        frame.add(welcome.getPanel());
-        frame.setPreferredSize(new Dimension(1000,800));
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        welcome.Welcome();
+
     }
 
-    
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new Run();
         });
-
     }
 }

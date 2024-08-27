@@ -23,9 +23,9 @@ public class Login {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
-
-    public Login() {
-
+   private JFrame loginFrame;
+    public Frame Login() {
+        loginFrame = new JFrame();
         loginPanel = new JPanel(new BorderLayout());
 
         JPanel leftPanel = new JPanel();
@@ -113,7 +113,8 @@ public class Login {
 
                     }else {
                         openManagerDashboard();
-                        //loginPanel.setVisible(false);
+                        loginFrame.dispose();
+
                     }
 
                 } catch (IOException exception) {
@@ -126,14 +127,18 @@ public class Login {
 
         loginPanel.add(leftPanel, BorderLayout.WEST);
         loginPanel.add(rightPanel, BorderLayout.CENTER);
+        loginFrame.add(loginPanel);
+        loginFrame.setPreferredSize(new Dimension(1000, 800));
+        loginFrame.pack();
+        loginFrame.setVisible(true);
+        loginFrame.setLocationRelativeTo(null);
 
+        return loginFrame;
     }
 
 
 
-    public JPanel getPanel() {
-        return loginPanel;
-    }
+
 
     public JwtAuthenticationResponse sendPostRequest(String url, SignInRequest signInRequest) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -177,17 +182,17 @@ public class Login {
         //MerchantDashboard merchantDashboard = new MerchantDashboard();
         //myFrame(registrationForm.getPanel());
         ManagerDashboard managerDashboard = new ManagerDashboard();
-        myFrame(managerDashboard.getPanel());
+        managerDashboard.ManagerDashboard();
     }
 
     private void openSalesPersonDashboard() {
         Registration registrationForm = new Registration();
-        myFrame(registrationForm.getPanel());
+        registrationForm.Registration();
     }
 
     private void openManagerDashboard() {
         ManagerDashboard managerDashboard = new ManagerDashboard();
-        myFrame(managerDashboard.getPanel());
+        managerDashboard.ManagerDashboard();
     }
 
     public void myFrame(JPanel panel) {
@@ -197,6 +202,4 @@ public class Login {
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
     }
-
-
 }

@@ -7,10 +7,11 @@ import java.awt.event.ActionListener;
 
 
 public class ManagerDashboard {
-
+    private JFrame jFrame;
     private JPanel managerDashboard;
-    public ManagerDashboard() {
 
+    public JFrame ManagerDashboard() {
+        jFrame = new JFrame();
         managerDashboard = new JPanel(new BorderLayout());
 
         JPanel navBar = new JPanel(new BorderLayout());
@@ -37,6 +38,13 @@ public class ManagerDashboard {
 
 
         managerDashboard.add(navBar, BorderLayout.NORTH);
+        jFrame.add(managerDashboard);
+        jFrame.add(managerDashboard);
+        jFrame.setPreferredSize(new Dimension(1000, 800));
+        jFrame.pack();
+        jFrame.setLocationRelativeTo(null);
+        jFrame.setVisible(true);
+
 
         JPanel centerPanel = new JPanel();
         centerPanel.setBackground(new Color(240, 248, 255));
@@ -57,8 +65,10 @@ public class ManagerDashboard {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         displayEmployees();
+                        jFrame.dispose();
                         //managerDashboard.setVisible(false);
                     }
+
                 });
 
             } else if (buttonNames[i].equals("Cellphone Sales")) {
@@ -83,23 +93,17 @@ public class ManagerDashboard {
             centerPanel.add(button, gbc);
         }
 
-
         managerDashboard.add(centerPanel, BorderLayout.CENTER);
 
+        return jFrame;
     }
 
 
     private void displayEmployees() {
-       JFrame frame = new JFrame("Phone Trader Application");
         DisplayEmployee displayEmployee = new DisplayEmployee();
-        frame.add(displayEmployee.getPanel());
-        frame.pack();
-        frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
+        displayEmployee.DisplayEmployee();
+
     }
 
-    public JPanel getPanel() {
-        return managerDashboard;
-    }
 }
 
