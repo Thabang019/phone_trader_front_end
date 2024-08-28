@@ -15,13 +15,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-public class DisplayEmployee {
-
+public class  DisplayEmployee {
+   private JFrame displayEmployee;
     private JPanel mainPanel;
     private static DefaultTableModel model;
     private static final OkHttpClient client = new OkHttpClient();
-    public DisplayEmployee(){
-
+    public JFrame DisplayEmployee(){
+        displayEmployee = new JFrame();
         mainPanel = new JPanel(new BorderLayout());
         JPanel topPanel = new JPanel(new BorderLayout());
         JLabel title = new JLabel("EMPLOYEES", JLabel.CENTER);
@@ -81,34 +81,42 @@ public class DisplayEmployee {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //mainPanel.setVisible(false);
+                openManagerDashboard();
+                displayEmployee.dispose();
+
             }});
 
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 openRegistration();
-                //mainPanel.setVisible(false);
+                displayEmployee.dispose();
             }
         });
 
         mainPanel.add(topPanel, BorderLayout.NORTH);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
-
+        displayEmployee.add(mainPanel);
+        displayEmployee.setPreferredSize(new Dimension(1000, 800));
+        displayEmployee.pack();
+        displayEmployee.setVisible(true);
+        displayEmployee.setLocationRelativeTo(null);
         getAll();
+        return displayEmployee;
     }
 
-    public JPanel getPanel(){
-        return mainPanel;
-    }
+
 
     private void openRegistration() {
-        JFrame frame = new JFrame("Phone Trader Application");
+
         Registration registrationForm = new Registration();
-        frame.add(registrationForm.getPanel());
-        frame.pack();
-        frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
+        registrationForm.Registration();
+
+    }
+    private void openManagerDashboard() {
+        ManagerDashboard dashboard = new ManagerDashboard();
+        dashboard.ManagerDashboard();
+
     }
 
 
