@@ -63,7 +63,7 @@ public class Welcome {
         welcomePanel.add(leftPanel, BorderLayout.WEST);
         welcomePanel.add(rightPanel, BorderLayout.CENTER);
         welcomeFrame.add(welcomePanel);
-        welcomeFrame.setPreferredSize(new Dimension(1000, 800));
+        welcomeFrame.setPreferredSize(new Dimension(1360, 800));
         welcomeFrame.pack();
         welcomeFrame.setVisible(true);
         welcomeFrame.setLocationRelativeTo(null);

@@ -128,7 +128,7 @@ public class Registration {
 
         registration.add(mainPanel, BorderLayout.CENTER);
         newFrame.add(registration);
-        newFrame.setPreferredSize(new Dimension(1000,800));
+        newFrame.setPreferredSize(new Dimension(1360, 800));
         newFrame.pack();
         newFrame.setLocationRelativeTo(null);
         newFrame.setVisible(true);

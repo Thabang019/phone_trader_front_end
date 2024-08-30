@@ -55,7 +55,7 @@ public class ManagerDashboard {
 
         managerDashboard.add(navBar, BorderLayout.NORTH);
         jFrame.add(managerDashboard);
-        jFrame.setPreferredSize(new Dimension(1000, 800));
+        jFrame.setPreferredSize(new Dimension(1360, 800));
         jFrame.pack();
         jFrame.setLocationRelativeTo(null);
         jFrame.setVisible(true);
@@ -142,6 +142,7 @@ public class ManagerDashboard {
     private void displayProfile() {
         JFrame frame = new JFrame("Phone Trader Application");
         frame.add(new EmployeeProfile());
+        frame.setPreferredSize(new Dimension(1360, 800));
         frame.pack();
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);

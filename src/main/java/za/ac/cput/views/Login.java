@@ -123,7 +123,7 @@ public class Login {
         loginPanel.add(leftPanel, BorderLayout.WEST);
         loginPanel.add(rightPanel, BorderLayout.CENTER);
         loginFrame.add(loginPanel);
-        loginFrame.setPreferredSize(new Dimension(1000, 800));
+        loginFrame.setPreferredSize(new Dimension(1360, 800));
         loginFrame.pack();
         loginFrame.setVisible(true);
         loginFrame.setLocationRelativeTo(null);
@@ -166,10 +166,7 @@ public class Login {
         }
     }
     private void openMerchantDashboard() {
-        //MerchantDashboard merchantDashboard = new MerchantDashboard();
-        //myFrame(registrationForm.getPanel());
-        ManagerDashboard managerDashboard = new ManagerDashboard();
-        managerDashboard.ManagerDashboard();
+        MerchantDashboard merchantDashboard = new MerchantDashboard();
     }
     private void openSalesPersonDashboard() {
         SalesPersonDashboard salesPersonDashboard = new SalesPersonDashboard();

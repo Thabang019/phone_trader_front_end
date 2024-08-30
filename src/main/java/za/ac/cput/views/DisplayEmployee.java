@@ -97,7 +97,8 @@ public class  DisplayEmployee {
         mainPanel.add(topPanel, BorderLayout.NORTH);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
         displayEmployee.add(mainPanel);
-        displayEmployee.setPreferredSize(new Dimension(1000, 800));
+
+        displayEmployee.setPreferredSize(new Dimension(1360, 800));
         displayEmployee.pack();
         displayEmployee.setVisible(true);
         displayEmployee.setLocationRelativeTo(null);

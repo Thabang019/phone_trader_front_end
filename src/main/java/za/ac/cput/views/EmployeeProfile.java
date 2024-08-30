@@ -84,7 +84,7 @@ private JFrame employeeProfile;
         gbc.gridx = 0; gbc.gridy++;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        JButton updatePersonalInfo = new JButton("Personal Details");
+        JButton updatePersonalInfo = new JButton("Update Personal Details");
         updatePersonalInfo.setBackground(new Color(192, 0, 0));
         updatePersonalInfo.setForeground(Color.WHITE);
         updatePersonalInfo.setFont(new Font("Arial", Font.BOLD, 14));
@@ -221,33 +221,41 @@ private JFrame employeeProfile;
 
     private void addPasswordComponents(JPanel panel) {
         GridBagConstraints gbc = createGbc(0, 0);
-
         panel.add(new JLabel("Current Password:"), gbc);
         gbc.gridx++;
         JPasswordField passwordField = new JPasswordField(20);
         panel.add(passwordField, gbc);
 
-        gbc.gridx = 0; gbc.gridy++;
+        gbc.gridx = 0;
+        gbc.gridy++;
         panel.add(new JLabel("New Password:"), gbc);
         gbc.gridx++;
         newPasswordField = new JPasswordField(20);
         panel.add(newPasswordField, gbc);
 
-        gbc.gridx = 0; gbc.gridy++;
+        gbc.gridx = 0;
+        gbc.gridy++;
         panel.add(new JLabel("Confirm New Password:"), gbc);
         gbc.gridx++;
         JPasswordField confirmPasswordField = new JPasswordField(20);
         panel.add(confirmPasswordField, gbc);
 
-        // Add Update Button
-        gbc.gridx = 0; gbc.gridy++;
-        gbc.gridwidth = 2;
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.CENTER;
         JButton updatePasswordButton = new JButton("Update Password");
         updatePasswordButton.setBackground(new Color(192, 0, 0));
         updatePasswordButton.setForeground(Color.WHITE);
         updatePasswordButton.setFont(new Font("Arial", Font.BOLD, 14));
         panel.add(updatePasswordButton, gbc);
+
+        gbc.gridx++;
+        JButton backButton = new JButton("Back");
+        backButton.setBackground(new Color(192, 0, 0));
+        backButton.setForeground(Color.WHITE);
+        backButton.setFont(new Font("Arial", Font.BOLD, 14));
+        panel.add(backButton, gbc);
 
         updatePasswordButton.addActionListener(e -> {
 
@@ -265,14 +273,21 @@ private JFrame employeeProfile;
                 JOptionPane.showMessageDialog(panel, "Password Updated Successfully");
             }
         });
+
+
+        backButton.addActionListener(e -> {
+            setVisible(false);
+            ManagerDashboard managerDashboard = new ManagerDashboard();
+            managerDashboard.ManagerDashboard();
+        });
     }
 
     private GridBagConstraints createGbc(int x, int y) {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = x;
         gbc.gridy = y;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 5, 5, 5); // Add some padding around components
+        gbc.anchor = GridBagConstraints.WEST; // Align components to the left
         return gbc;
     }
 

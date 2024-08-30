@@ -107,8 +107,8 @@ public class SalesPersonDashboard extends JFrame {
         // Add the filterButtons panel to the container
         container.add(filterButtons, BorderLayout.CENTER);
         setTitle("Phone Trader");
+        setPreferredSize(new Dimension(1360, 800));
         setVisible(true);
-        setPreferredSize(new Dimension(1000, 800));
         pack();
         setLocationRelativeTo(null);
 

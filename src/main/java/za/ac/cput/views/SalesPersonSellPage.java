@@ -188,11 +188,27 @@ public class SalesPersonSellPage extends JFrame {
             }
         });
 
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource() == backButton) {
+                    SalesPersonDashboard salesPersonDashboard = new SalesPersonDashboard();
+                    try {
+                        SalesPersonSellPage sales = new SalesPersonSellPage();
+                        sales.dispose();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+                }
+            }
+        });
+
         // Add main container to the frame
         add(mainContainer);
         setTitle("Phone Details");
         setVisible(true);
-        setPreferredSize(new Dimension(1000, 700));
+        setPreferredSize(new Dimension(1360, 800));
         pack();
         setLocationRelativeTo(null);
     }

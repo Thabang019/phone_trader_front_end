@@ -10,9 +10,11 @@ import okhttp3.*;
 import za.ac.cput.domain.*;
 import za.ac.cput.domain.Address;
 import za.ac.cput.dto.EmployeeStorage;
+import za.ac.cput.dto.TokenStorage;
 import za.ac.cput.factory.*;
 import za.ac.cput.util.LocalDateTimeTypeAdapter;
 import za.ac.cput.util.LocalDateTypeAdapter;
+import za.ac.cput.util.LocalTimeTypeAdapter;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -56,8 +58,7 @@ public class MerchantDashboard {
         setupContentPanel();
 
         frame.add(dashboardPanel);
-
-        frame.setPreferredSize(new Dimension(1400, 750));
+        frame.setPreferredSize(new Dimension(1360, 800));
         frame.pack();
         frame.setLocationRelativeTo(null);
     }
@@ -79,6 +80,8 @@ public class MerchantDashboard {
                 int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to log out?", "Log Out", JOptionPane.YES_NO_OPTION);
                 if (confirm == JOptionPane.YES_OPTION) {
                     frame.dispose();
+                   Welcome welcome = new Welcome();
+                    welcome.Welcome();
                 }
             }
         });
@@ -102,23 +105,22 @@ public class MerchantDashboard {
                             Spec spec = SpecificationFactory.createSpecification(screenSize, storageDropdown.getSelectedItem().toString(), ramDropdown.getSelectedItem().toString(), osDropdown.getSelectedItem().toString(), cameraField.getText(), Integer.parseInt(simDropdown.getSelectedItem().toString()),
                                     microsdDropdown.getSelectedItem().toString(), fingerprintDropdown.getSelectedItem().toString(), waterResistanceDropdown.getSelectedItem().toString(), wirelessChargingDropdown.getSelectedItem().toString());
                             System.out.println(spec);
-                            Long imei = Long.valueOf(imeiField.getText());
+
                             double price = Double.parseDouble(priceField.getText());
 
-                            //Phone.Condition condition1 = Phone.Condition.NEW.valueOf(conditionDropdown.getSelectedItem().toString());
                             Phone.Condition condition1 = Phone.Condition.valueOf(conditionDropdown.getSelectedItem().toString());
-                            Phone phone = PhoneFactory.createPhone(imei, brandDropdown.getSelectedItem().toString(), modelField.getText(), colorDropdown.getSelectedItem().toString(), price, "available", spec, Phone.Condition.NEW);
+                            Phone phone = PhoneFactory.createPhone(imeiField.getText(), brandDropdown.getSelectedItem().toString(), modelField.getText(), colorDropdown.getSelectedItem().toString(), price, "available", spec, Phone.Condition.NEW);
                             Address address = AddressFactory.buildAddress("123","New Market","Woodstock","Cape Town","7750");
                             System.out.println(phone);
                             Contact contact = ContactFactory.createContact("0789456123","email@gmail.com",address);
                             Purchase purchase = PurchaseFactory.createPurchase(LocalDate.now(), LocalTime.now(), EmployeeStorage.getInstance().getEmployee(), 1200, "cash", phone);
                             ArrayList<Purchase> purchaseList = new ArrayList<>();
                             purchaseList.add(purchase);
-                            Seller buyer = SellerFactory.createSeller("3241","Okuhle", "Kwanele", "Gebashe",contact, purchaseList);
+                            Seller seller = SellerFactory.createSeller("3241","Okuhle", "Kwanele", "Gebashe",contact, purchaseList);
                             System.out.println(purchase);
 
-                            String response = createPurchase("http://localhost:8080/phone-trader/purchase/save", purchase);
-                            System.out.println(response + "response");
+                            String response = createSeller("http://localhost:8080/phone-trader/seller/sav", seller );
+                            System.out.println(response);
 
                             JOptionPane.showMessageDialog(frame, "Purchase successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         } catch (Exception ex) {
@@ -130,6 +132,9 @@ public class MerchantDashboard {
             });
             frame.setVisible(true);
             dashboardPanel.add(purchaseButton, BorderLayout.SOUTH);
+
+
+
 
     }
 
@@ -192,7 +197,7 @@ public class MerchantDashboard {
         }
     }
 
-    private void addCustomerDetails(JPanel customerDetailsPanel) {
+    public void addCustomerDetails(JPanel customerDetailsPanel) {
         String[] labels = {
                 "Identity Number:", "First Name:", "Middle Name:", "Last Name:", "Email:", "Phone Number:",
                 "Alternative Number:", "Street Number:", "Street Name:", "Suburb:", "City:", "Postal Code:"
@@ -220,7 +225,7 @@ public class MerchantDashboard {
         }
     }
 
-   private boolean validateForm() {
+    public boolean validateForm() {
        boolean isValid = true;
 
        Component[] components = ((Container) dashboardPanel.getComponent(0)).getComponents();
@@ -234,7 +239,7 @@ public class MerchantDashboard {
        return isValid;
    }
 
-    private boolean isValid(JPanel panel, boolean isValid) {
+    public boolean isValid(JPanel panel, boolean isValid) {
         for (Component component : panel.getComponents()) {
             if (component instanceof JTextField textField) {
                 if (textField.getText().isEmpty()) {
@@ -248,23 +253,30 @@ public class MerchantDashboard {
         return isValid;
     }
 
+    public String createSeller(String url, Seller seller) throws IOException {
+        String json = gson.toJson(seller);
+        return post(url, json);
+    }
 
-
-    private String createPurchase(String url, Purchase purchase) throws IOException {
+    public String createPurchase(String url, Purchase purchase) throws IOException {
         String json = gson.toJson(purchase);
         return post(url, json);
     }
 
-    private String post(String url, String json) throws IOException {
+    public String post(String url, String json) throws IOException {
+        String token = TokenStorage.getInstance().getToken();
         RequestBody body = RequestBody.create(json, JSON);
         Request request = new Request.Builder()
                 .url(url)
-
+                .header("Authorization", "Bearer " + token)
                 .post(body)
                 .build();
         try (Response response = client.newCall(request).execute()) {
             return response.body().string();
+        } catch (Exception ex){
+            System.out.println("Failed");
         }
+        return token;
     }
 
     public void showDashboard() {
