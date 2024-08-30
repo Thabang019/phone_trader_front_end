@@ -7,13 +7,10 @@ import java.awt.event.ActionListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import okhttp3.*;
-import za.ac.cput.domain.Phone;
-import za.ac.cput.domain.Purchase;
-import za.ac.cput.domain.Spec;
+import za.ac.cput.domain.*;
+import za.ac.cput.domain.Address;
 import za.ac.cput.dto.EmployeeStorage;
-import za.ac.cput.factory.PhoneFactory;
-import za.ac.cput.factory.PurchaseFactory;
-import za.ac.cput.factory.SpecificationFactory;
+import za.ac.cput.factory.*;
 import za.ac.cput.util.LocalDateTimeTypeAdapter;
 import za.ac.cput.util.LocalDateTypeAdapter;
 
@@ -21,7 +18,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
+import java.util.ArrayList;
 
 
 public class MerchantDashboard {
@@ -111,11 +108,13 @@ public class MerchantDashboard {
                             //Phone.Condition condition1 = Phone.Condition.NEW.valueOf(conditionDropdown.getSelectedItem().toString());
                             Phone.Condition condition1 = Phone.Condition.valueOf(conditionDropdown.getSelectedItem().toString());
                             Phone phone = PhoneFactory.createPhone(imei, brandDropdown.getSelectedItem().toString(), modelField.getText(), colorDropdown.getSelectedItem().toString(), price, "available", spec, Phone.Condition.NEW);
-
+                            Address address = AddressFactory.buildAddress("123","New Market","Woodstock","Cape Town","7750");
                             System.out.println(phone);
-
+                            Contact contact = ContactFactory.createContact("0789456123","email@gmail.com",address);
                             Purchase purchase = PurchaseFactory.createPurchase(LocalDate.now(), LocalTime.now(), EmployeeStorage.getInstance().getEmployee(), 1200, "cash", phone);
-
+                            ArrayList<Purchase> purchaseList = new ArrayList<>();
+                            purchaseList.add(purchase);
+                            Seller buyer = SellerFactory.createSeller("3241","Okuhle", "Kwanele", "Gebashe",contact, purchaseList);
                             System.out.println(purchase);
 
                             String response = createPurchase("http://localhost:8080/phone-trader/purchase/save", purchase);
