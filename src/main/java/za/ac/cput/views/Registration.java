@@ -20,7 +20,7 @@ import javax.swing.*;
 import java.io.IOException;
 
 public class Registration {
-private JFrame newFrame;
+    private JFrame newFrame;
     private JPanel registration;
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private final OkHttpClient client = new OkHttpClient();
@@ -187,14 +187,14 @@ private JFrame newFrame;
             }
         });
 
-   backButton.addActionListener(new ActionListener() {
-       @Override
-       public void actionPerformed(ActionEvent actionEvent) {
-           managerDashboard();
-           newFrame.dispose();
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                managerDashboard();
+                newFrame.dispose();
 
-       }
-   });
+            }
+        });
 
         cancelButton.addActionListener(new ActionListener() {
             @Override

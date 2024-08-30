@@ -14,7 +14,7 @@ import java.io.IOException;
 
 
 public class EmployeeProfile extends JPanel {
-
+private JFrame employeeProfile;
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     final OkHttpClient client = new OkHttpClient();
     final Gson gson = new Gson();
@@ -23,6 +23,7 @@ public class EmployeeProfile extends JPanel {
 
     private JScrollPane scrollPane;
     public EmployeeProfile() {
+         employeeProfile = new JFrame();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));

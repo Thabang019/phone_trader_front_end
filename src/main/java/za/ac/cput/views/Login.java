@@ -109,7 +109,7 @@ public class Login {
 
                     if(employee.getRole().equals(Employee.Role.Buyer)){
                         openMerchantDashboard();
-                        //loginPanel.setVisible(false);
+                        loginFrame.dispose();
 
                     } else if(employee.getRole().equals(Employee.Role.Salesperson)){
                         openSalesPersonDashboard();
@@ -183,10 +183,9 @@ public class Login {
     }
 
     private void openMerchantDashboard() {
-        //MerchantDashboard merchantDashboard = new MerchantDashboard();
-        //myFrame(registrationForm.getPanel());
-        ManagerDashboard managerDashboard = new ManagerDashboard();
-        managerDashboard.ManagerDashboard();
+        MerchantDashboard merchantDashboard = new MerchantDashboard();
+        merchantDashboard.showDashboard();
+
     }
 
     private void openSalesPersonDashboard() {
