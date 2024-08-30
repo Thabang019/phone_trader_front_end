@@ -4,7 +4,6 @@ import java.util.Objects;
 
 public class Spec {
 
-    private Long id;
     private double screenSize;
     private String storage;
     private String ram;
@@ -20,7 +19,7 @@ public class Spec {
     }
 
     private Spec(Builder builder ) {
-        this.id = builder.id;
+
         this.screenSize = builder.screenSize;
         this.storage = builder.storage;
         this.ram = builder.ram;
@@ -33,9 +32,7 @@ public class Spec {
         this.wirelessCharging = builder.wirelessCharging;
     }
 
-    public Long getId() {
-        return id;
-    }
+
 
     public double getScreenSize() {
         return screenSize;
@@ -82,18 +79,18 @@ public class Spec {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Spec that = (Spec) o;
-        return Double.compare(screenSize, that.screenSize) == 0 && numOfSims == that.numOfSims && Objects.equals(id, that.id) && Objects.equals(storage, that.storage) && Objects.equals(ram, that.ram) && Objects.equals(operatingSystem, that.operatingSystem) && Objects.equals(camera, that.camera) && Objects.equals(microSD, that.microSD) && Objects.equals(fingerPrint, that.fingerPrint) && Objects.equals(waterResistance, that.waterResistance) && Objects.equals(wirelessCharging, that.wirelessCharging);
+        return Double.compare(screenSize, that.screenSize) == 0 && numOfSims == that.numOfSims  && Objects.equals(storage, that.storage) && Objects.equals(ram, that.ram) && Objects.equals(operatingSystem, that.operatingSystem) && Objects.equals(camera, that.camera) && Objects.equals(microSD, that.microSD) && Objects.equals(fingerPrint, that.fingerPrint) && Objects.equals(waterResistance, that.waterResistance) && Objects.equals(wirelessCharging, that.wirelessCharging);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, screenSize, storage, ram, operatingSystem, camera, numOfSims, microSD, fingerPrint, waterResistance, wirelessCharging);
+        return Objects.hash( screenSize, storage, ram, operatingSystem, camera, numOfSims, microSD, fingerPrint, waterResistance, wirelessCharging);
     }
 
     @Override
     public String toString() {
         return "Spec{" +
-                "id=" + id +
+
                 ", screenSize=" + screenSize +
                 ", storage='" + storage + '\'' +
                 ", ram='" + ram + '\'' +
@@ -110,7 +107,7 @@ public class Spec {
 
     public static class Builder {
 
-        private Long id;
+
         private double screenSize;
         private String storage;
         private String ram;
@@ -122,10 +119,7 @@ public class Spec {
         private String waterResistance;
         private String wirelessCharging;
 
-        public Builder setId(Long id) {
-            this.id = id;
-            return this;
-        }
+
 
         public Builder setScreenSize(double screenSize) {
             this.screenSize = screenSize;
@@ -178,7 +172,7 @@ public class Spec {
         }
 
         public Builder copy(Spec specification){
-            this.id = specification.id;
+
             this.screenSize = specification.screenSize;
             this.storage = specification.storage;
             this.ram = specification.ram;
