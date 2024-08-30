@@ -16,7 +16,6 @@ import za.ac.cput.factory.PurchaseFactory;
 import za.ac.cput.factory.SpecificationFactory;
 import za.ac.cput.util.LocalDateTimeTypeAdapter;
 import za.ac.cput.util.LocalDateTypeAdapter;
-import za.ac.cput.util.LocalTimeTypeAdapter;
 
 import java.io.IOException;
 import java.time.LocalDate;

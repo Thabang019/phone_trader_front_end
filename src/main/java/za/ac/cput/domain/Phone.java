@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Phone {
 
-    private Long imei;
+    private String imei;
 
     private String brand;
 
@@ -39,7 +39,7 @@ public class Phone {
         this.condition = builder.condition;
     }
 
-    public Long getImei() {
+    public String getImei() {
         return imei;
     }
 
@@ -99,7 +99,7 @@ public class Phone {
 
 
     public static class Builder {
-        private long imei;
+        private String imei;
         private String brand;
         private String model;
         private String color;
@@ -109,7 +109,7 @@ public class Phone {
         private Condition condition;
 
 
-        public Builder setImei(long imei) {
+        public Builder setImei(String imei) {
             this.imei = imei;
             return this;
         }

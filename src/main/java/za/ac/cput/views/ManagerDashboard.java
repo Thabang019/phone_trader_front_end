@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class ManagerDashboard {
@@ -26,6 +28,7 @@ public class ManagerDashboard {
         ImageIcon resizedLogoIcon = new ImageIcon(resizedLogo);
         JLabel logoLabel = new JLabel(resizedLogoIcon);
         logoPanel.add(logoLabel);
+
 
 
         JPanel profilePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -52,7 +55,6 @@ public class ManagerDashboard {
 
         managerDashboard.add(navBar, BorderLayout.NORTH);
         jFrame.add(managerDashboard);
-        jFrame.add(managerDashboard);
         jFrame.setPreferredSize(new Dimension(1000, 800));
         jFrame.pack();
         jFrame.setLocationRelativeTo(null);
@@ -73,44 +75,63 @@ public class ManagerDashboard {
         });
 
 
-        String[] buttonNames = {"Employees", "Cellphone Sales", "Device Inventory", "Customers", "Sellers", "Logged queries", "Weekly Reports", "Profit"};
+        String[] buttonNames = {"EMPLOYEES", "PHONE SALES", "PHONES INVENTORY", "PURCHASED PHONES", "ACCESSORIES", "RETURNS", "CUSTOMERS", "LOGOUT"};
+
         for (int i = 0; i < buttonNames.length; i++) {
             JButton button = new JButton(buttonNames[i]);
-            button.setPreferredSize(new Dimension(160, 100));
-            button.setFont(new Font("Arial", Font.PLAIN, 14));
+            button.setPreferredSize(new Dimension(170, 100));
+            button.setFont(new Font("Arial", Font.BOLD, 13));
+            button.setBackground(new Color(70, 130, 180));
+            button.setBorder(BorderFactory.createEmptyBorder());
+            button.setFocusPainted(false);
+            button.setContentAreaFilled(false);
+            button.setOpaque(true);
 
-            if (buttonNames[i].equals("Employees")) {
-                button.setBackground(Color.YELLOW);
+            if (buttonNames[i].equals("EMPLOYEES")) {
+                button.setForeground(Color.YELLOW);
                 button.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         displayEmployees();
                         jFrame.dispose();
-                        //managerDashboard.setVisible(false);
                     }
-
                 });
 
-            } else if (buttonNames[i].equals("Cellphone Sales")) {
-                button.setBackground(Color.LIGHT_GRAY);
-            } else if (buttonNames[i].equals("Device Inventory")) {
-                button.setBackground(Color.LIGHT_GRAY);
-            } else if (buttonNames[i].equals("Customers")) {
-                button.setBackground(Color.LIGHT_GRAY);
-            } else if (buttonNames[i].equals("Sellers")) {
-                button.setBackground(new Color(144, 238, 144));
-            } else if (buttonNames[i].equals("Logged queries")) {
-                button.setBackground(Color.LIGHT_GRAY);
-            } else if (buttonNames[i].equals("Weekly Reports")) {
-                button.setBackground(Color.LIGHT_GRAY);
-            } else if (buttonNames[i].equals("Profit")) {
-                button.setBackground(Color.LIGHT_GRAY);
-            }
+            } else if (buttonNames[i].equals("PHONE SALES")) {
+                button.setForeground(Color.WHITE);
 
+            } else if (buttonNames[i].equals("PHONES INVENTORY")) {
+                button.setForeground(Color.WHITE);
+
+            } else if (buttonNames[i].equals("PURCHASED PHONES")) {
+                button.setForeground(Color.WHITE);
+
+            } else if (buttonNames[i].equals("ACCESSORIES")) {
+                button.setForeground(Color.WHITE);
+
+            } else if (buttonNames[i].equals("RETURNS")) {
+                button.setForeground(Color.WHITE);
+
+            } else if (buttonNames[i].equals("CUSTOMERS")) {
+                button.setForeground(Color.WHITE);
+
+            } else if (buttonNames[i].equals("LOGOUT")) {
+                button.setForeground(Color.RED);
+            }
 
             gbc.gridx = i % 3;
             gbc.gridy = i / 3;
             centerPanel.add(button, gbc);
+
+            button.addMouseListener(new MouseAdapter() {
+                public void mouseEntered(MouseEvent evt) {
+                    button.setBackground(new Color(41, 128, 185));
+                }
+
+                public void mouseExited(MouseEvent evt) {
+                    button.setBackground(new Color(52, 152, 219));
+                }
+            });
         }
 
         managerDashboard.add(centerPanel, BorderLayout.CENTER);
@@ -131,6 +152,7 @@ public class ManagerDashboard {
         displayEmployee.DisplayEmployee();
 
     }
+
 
 }
 
