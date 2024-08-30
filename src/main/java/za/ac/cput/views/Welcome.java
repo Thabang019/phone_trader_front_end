@@ -68,7 +68,6 @@ public class Welcome {
         welcomeFrame.setVisible(true);
         welcomeFrame.setLocationRelativeTo(null);
 
-
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -5,7 +5,7 @@ import za.ac.cput.domain.Spec;
 
 public class PhoneFactory {
 
-    public static Phone createPhone(long imei, String brand, String model,
+    public static Phone createPhone(String imei, String brand, String model,
                                     String color, double price,
                                     String status, Spec specification,
                                     Phone.Condition condition){

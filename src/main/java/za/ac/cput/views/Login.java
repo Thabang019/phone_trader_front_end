@@ -16,7 +16,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class Login {
-
     private final OkHttpClient client = new OkHttpClient();
     private Request requestSignIn, requestEmployee;
     private final Gson gson = new Gson();
@@ -24,7 +23,7 @@ public class Login {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
-   private JFrame loginFrame;
+    private JFrame loginFrame;
     public Frame Login() {
         loginFrame = new JFrame();
         loginPanel = new JPanel(new BorderLayout());
@@ -34,12 +33,11 @@ public class Login {
         leftPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
-        JLabel welcomeLabel = new JLabel("Welcome to Phone-Trader");
+        JLabel welcomeLabel = new JLabel("<html><center<h1>Welcome<br>to<br>Phone-Trader</h1></center></html>");
         welcomeLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         welcomeLabel.setForeground(Color.WHITE);
         leftPanel.add(welcomeLabel, gbc);
         loginPanel.add(leftPanel);
-
 
         JPanel rightPanel = new JPanel();
         rightPanel.setBackground(Color.WHITE);
@@ -47,7 +45,6 @@ public class Login {
         GridBagConstraints rightGbc = new GridBagConstraints();
         rightGbc.insets = new Insets(10, 10, 10, 10);
         rightGbc.fill = GridBagConstraints.HORIZONTAL;
-
 
         rightGbc.gridx = 0;
         rightGbc.gridy = 0;
@@ -66,7 +63,6 @@ public class Login {
         rightGbc.anchor = GridBagConstraints.CENTER;
         rightPanel.add(usernameField, rightGbc);
 
-
         rightGbc.gridy++;
         rightGbc.gridx = 0;
         rightGbc.anchor = GridBagConstraints.EAST;
@@ -77,7 +73,6 @@ public class Login {
         rightGbc.anchor = GridBagConstraints.CENTER;
         rightPanel.add(passwordField, rightGbc);
 
-
         rightGbc.gridy++;
         rightGbc.gridx = 1;
         rightGbc.gridwidth = 1;
@@ -87,7 +82,6 @@ public class Login {
         loginButton.setForeground(Color.WHITE);
         rightPanel.add(loginButton, rightGbc);
         loginPanel.add(rightPanel);
-
 
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -113,21 +107,18 @@ public class Login {
 
                     } else if(employee.getRole().equals(Employee.Role.Salesperson)){
                         openSalesPersonDashboard();
-                        //loginPanel.setVisible(false);
+                        loginFrame.dispose();
 
                     }else {
                         openManagerDashboard();
                         loginFrame.dispose();
-
                     }
-
                 } catch (IOException exception) {
                     JOptionPane.showMessageDialog(null, "Access Denied !");
                     exception.printStackTrace();
                 }
             }
         });
-
 
         loginPanel.add(leftPanel, BorderLayout.WEST);
         loginPanel.add(rightPanel, BorderLayout.CENTER);
@@ -139,10 +130,6 @@ public class Login {
 
         return loginFrame;
     }
-
-
-
-
 
     public JwtAuthenticationResponse sendPostRequest(String url, SignInRequest signInRequest) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -161,10 +148,7 @@ public class Login {
             String responseBody = response.body().string();
             return objectMapper.readValue(responseBody, JwtAuthenticationResponse.class);
         }
-
-
     }
-
     public Employee readEmployee(String url) throws IOException {
         String token = TokenStorage.getInstance().getToken();
         requestEmployee = new Request.Builder()
@@ -181,28 +165,19 @@ public class Login {
             }
         }
     }
-
     private void openMerchantDashboard() {
-        MerchantDashboard merchantDashboard = new MerchantDashboard();
-        merchantDashboard.showDashboard();
-
+        //MerchantDashboard merchantDashboard = new MerchantDashboard();
+        //myFrame(registrationForm.getPanel());
+        ManagerDashboard managerDashboard = new ManagerDashboard();
+        managerDashboard.ManagerDashboard();
     }
-
     private void openSalesPersonDashboard() {
-        Registration registrationForm = new Registration();
-        registrationForm.Registration();
+        SalesPersonDashboard salesPersonDashboard = new SalesPersonDashboard();
     }
-
     private void openManagerDashboard() {
         ManagerDashboard managerDashboard = new ManagerDashboard();
         managerDashboard.ManagerDashboard();
     }
-
-    public void myFrame(JPanel panel) {
-        JFrame frame = new JFrame("Phone Trader Application");
-        frame.add(panel);
-        frame.pack();
-        frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
-    }
 }
+
+
