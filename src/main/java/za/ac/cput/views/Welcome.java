@@ -18,7 +18,7 @@ public class Welcome {
         leftPanel.setLayout(new GridBagLayout());
         leftPanel.setPreferredSize(new Dimension(300, 450));
 
-        JLabel titleLabel = new JLabel("Phone-Trader");
+        JLabel titleLabel = new JLabel("Phone Trader");
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
 
@@ -63,10 +63,9 @@ public class Welcome {
         welcomePanel.add(leftPanel, BorderLayout.WEST);
         welcomePanel.add(rightPanel, BorderLayout.CENTER);
         welcomeFrame.add(welcomePanel);
-        welcomeFrame.setPreferredSize(new Dimension(1360, 800));
-        welcomeFrame.pack();
+        welcomeFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         welcomeFrame.setVisible(true);
-        welcomeFrame.setLocationRelativeTo(null);
+        welcomeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         loginButton.addActionListener(new ActionListener() {
             @Override

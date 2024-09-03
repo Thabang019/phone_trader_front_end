@@ -58,9 +58,8 @@ public class MerchantDashboard {
         setupContentPanel();
 
         frame.add(dashboardPanel);
-        frame.setPreferredSize(new Dimension(1360, 800));
-        frame.pack();
-        frame.setLocationRelativeTo(null);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
     }
 
     private void setupMenuBar() {
@@ -119,7 +118,7 @@ public class MerchantDashboard {
                             Seller seller = SellerFactory.createSeller("3241","Okuhle", "Kwanele", "Gebashe",contact, purchaseList);
                             System.out.println(purchase);
 
-                            String response = createSeller("http://localhost:8080/phone-trader/seller/sav", seller );
+                            String response = createSeller("http://localhost:8080/phone-trader/seller/save", seller );
                             System.out.println(response);
 
                             JOptionPane.showMessageDialog(frame, "Purchase successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -133,11 +132,7 @@ public class MerchantDashboard {
             frame.setVisible(true);
             dashboardPanel.add(purchaseButton, BorderLayout.SOUTH);
 
-
-
-
     }
-
 
     private void setupContentPanel() {
         JPanel contentPanel = new JPanel(new GridLayout(1, 2, 20, 0));

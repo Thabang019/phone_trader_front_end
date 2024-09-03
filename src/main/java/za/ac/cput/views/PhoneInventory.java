@@ -26,9 +26,8 @@ public class PhoneInventory {
 
     public JFrame PhoneInventory() {
         displayInventory = new JFrame("Device Inventory");
-        displayInventory.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        displayInventory.setSize(1360, 800);
-        displayInventory.setLocationRelativeTo(null);
+        displayInventory.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        displayInventory.setVisible(true);
         displayInventory.setLayout(new BorderLayout());
 
         mainPanel = new JPanel(new BorderLayout());
@@ -51,10 +50,13 @@ public class PhoneInventory {
 
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
-        String[] columnNames = {"IMEI", "Brand", "Model", "Color", "Price", "Status", "Specification", "Condition"};
+        String[] columnNames = {"IMEI", "Brand", "Model", "Color", "Price", "Status","Condition"};
         tableModel = new DefaultTableModel(columnNames, 0);
         JTable table = new JTable(tableModel);
-        table.setRowHeight(30);
+        table.setRowHeight(24);
+        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+        table.getTableHeader().setBackground(new Color(192, 0, 0));
+        table.getTableHeader().setForeground(Color.WHITE);
         JScrollPane scrollPane = new JScrollPane(table);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
@@ -131,7 +133,6 @@ public class PhoneInventory {
                             phone.getColor(),
                             phone.getPrice(),
                             phone.getStatus(),
-                            specification,
                             condition
                     });
                 }
@@ -174,7 +175,6 @@ public class PhoneInventory {
                             phone.getColor(),
                             phone.getPrice(),
                             phone.getStatus(),
-                            specification,
                             condition
                     });
                 } else {

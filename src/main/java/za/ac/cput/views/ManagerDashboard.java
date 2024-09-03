@@ -55,9 +55,7 @@ public class ManagerDashboard {
 
         managerDashboard.add(navBar, BorderLayout.NORTH);
         jFrame.add(managerDashboard);
-        jFrame.setPreferredSize(new Dimension(1360, 800));
-        jFrame.pack();
-        jFrame.setLocationRelativeTo(null);
+        jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         jFrame.setVisible(true);
 
 
@@ -71,6 +69,7 @@ public class ManagerDashboard {
             @Override
             public void actionPerformed(ActionEvent e) {
                 displayProfile();
+                jFrame.dispose();
             }
         });
 
@@ -124,6 +123,17 @@ public class ManagerDashboard {
 
             } else if (buttonNames[i].equals("LOGOUT")) {
                 button.setForeground(Color.RED);
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int confirm = JOptionPane.showConfirmDialog(managerDashboard, "Are you sure you want to log out?", "Log Out", JOptionPane.YES_NO_OPTION);
+                        if (confirm == JOptionPane.YES_OPTION) {
+                            jFrame.dispose();
+                            Welcome welcome = new Welcome();
+                            welcome.Welcome();
+                        }
+                    }
+                });
             }
 
             gbc.gridx = i % 3;
@@ -134,7 +144,6 @@ public class ManagerDashboard {
                 public void mouseEntered(MouseEvent evt) {
                     button.setBackground(new Color(41, 128, 185));
                 }
-
                 public void mouseExited(MouseEvent evt) {
                     button.setBackground(new Color(52, 152, 219));
                 }
@@ -147,12 +156,10 @@ public class ManagerDashboard {
     }
 
     private void displayProfile() {
-        JFrame frame = new JFrame("Phone Trader Application");
+        JFrame frame = new JFrame("Employee Profile");
         frame.add(new EmployeeProfile());
-        frame.setPreferredSize(new Dimension(1360, 800));
-        frame.pack();
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
     }
 
     private void displayEmployees() {

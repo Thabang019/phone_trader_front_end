@@ -107,10 +107,8 @@ public class SalesPersonDashboard extends JFrame {
         // Add the filterButtons panel to the container
         container.add(filterButtons, BorderLayout.CENTER);
         setTitle("Phone Trader");
-        setPreferredSize(new Dimension(1360, 800));
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible(true);
-        pack();
-        setLocationRelativeTo(null);
 
         iphoneButton.addActionListener(new ActionListener() {
             @Override

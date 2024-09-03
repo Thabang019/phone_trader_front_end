@@ -33,7 +33,7 @@ public class Login {
         leftPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
-        JLabel welcomeLabel = new JLabel("<html><center<h1>Welcome<br>to<br>Phone-Trader</h1></center></html>");
+        JLabel welcomeLabel = new JLabel("<html><center<h1>Welcome<br>to<br>Phone Trader</h1></center></html>");
         welcomeLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         welcomeLabel.setForeground(Color.WHITE);
         leftPanel.add(welcomeLabel, gbc);
@@ -115,6 +115,8 @@ public class Login {
                     }
                 } catch (IOException exception) {
                     JOptionPane.showMessageDialog(null, "Access Denied !");
+                    usernameField.setText("");
+                    passwordField.setText("");
                     exception.printStackTrace();
                 }
             }
@@ -123,10 +125,8 @@ public class Login {
         loginPanel.add(leftPanel, BorderLayout.WEST);
         loginPanel.add(rightPanel, BorderLayout.CENTER);
         loginFrame.add(loginPanel);
-        loginFrame.setPreferredSize(new Dimension(1360, 800));
-        loginFrame.pack();
+        loginFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         loginFrame.setVisible(true);
-        loginFrame.setLocationRelativeTo(null);
 
         return loginFrame;
     }

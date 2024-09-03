@@ -207,10 +207,8 @@ public class SalesPersonSellPage extends JFrame {
         // Add main container to the frame
         add(mainContainer);
         setTitle("Phone Details");
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible(true);
-        setPreferredSize(new Dimension(1360, 800));
-        pack();
-        setLocationRelativeTo(null);
     }
     private JLabel createLabel(String labelText) {
         JLabel label = new JLabel(labelText);

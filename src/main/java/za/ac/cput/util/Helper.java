@@ -32,8 +32,8 @@ public class Helper {
 
     public static boolean validPassword(String password) {
 
-        if(password == null || password.isEmpty())
-            return true;
+        if (password == null || password.isEmpty())
+            return false;
 
         String regex = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!*?&]{8,}$";
 
@@ -41,6 +41,7 @@ public class Helper {
                 .matcher(password)
                 .matches();
     }
+
     public static boolean isObjectNull(Object o){
         if (o.equals(null) || o == null){
 

@@ -7,6 +7,7 @@ import za.ac.cput.domain.Contact;
 import za.ac.cput.domain.Employee;
 import za.ac.cput.dto.EmployeeStorage;
 import za.ac.cput.dto.TokenStorage;
+import za.ac.cput.util.Helper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +15,7 @@ import java.io.IOException;
 
 
 public class EmployeeProfile extends JPanel {
-private JFrame employeeProfile;
+    private JFrame employeeProfile;
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     final OkHttpClient client = new OkHttpClient();
     final Gson gson = new Gson();
@@ -60,25 +61,25 @@ private JFrame employeeProfile;
 
         panel.add(new JLabel("First Name:"), gbc);
         gbc.gridx++;
-        firstName = new JTextField(EmployeeStorage.getInstance().getEmployee().getFirstName());
+        firstName = new JTextField(EmployeeStorage.getInstance().getEmployee().getFirstName(), 20);
         panel.add(firstName, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
         panel.add(new JLabel("Middle Name:"), gbc);
         gbc.gridx++;
-         middleName = new JTextField(EmployeeStorage.getInstance().getEmployee().getMiddleName());
+         middleName = new JTextField(EmployeeStorage.getInstance().getEmployee().getMiddleName(), 20);
         panel.add(middleName, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
         panel.add(new JLabel("Last Name:"), gbc);
         gbc.gridx++;
-         lastName = new JTextField(EmployeeStorage.getInstance().getEmployee().getLastName());
+         lastName = new JTextField(EmployeeStorage.getInstance().getEmployee().getLastName(), 20);
         panel.add(lastName, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
         panel.add(new JLabel("Employee Id:"), gbc);
         gbc.gridx++;
-         employeeId = new JTextField(String.valueOf(EmployeeStorage.getInstance().getEmployee().getEmployeeID()));
+         employeeId = new JTextField(String.valueOf(EmployeeStorage.getInstance().getEmployee().getEmployeeID()), 20);
         panel.add(employeeId, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
@@ -87,6 +88,8 @@ private JFrame employeeProfile;
         JButton updatePersonalInfo = new JButton("Update Personal Details");
         updatePersonalInfo.setBackground(new Color(192, 0, 0));
         updatePersonalInfo.setForeground(Color.WHITE);
+        updatePersonalInfo.setBorderPainted(false);
+        updatePersonalInfo.setFocusPainted(false);
         updatePersonalInfo.setFont(new Font("Arial", Font.BOLD, 14));
         panel.add(updatePersonalInfo, gbc);
 
@@ -107,7 +110,8 @@ private JFrame employeeProfile;
             } else if (!middleName.getText().equals(EmployeeStorage.getInstance().getEmployee().getMiddleName())){
                 updateMiddleName();
                 JOptionPane.showMessageDialog(panel, "Successfully Updated Middle Name");
-
+            } else {
+                JOptionPane.showMessageDialog(panel, "Update Unsuccessful");
             }
         });
     }
@@ -117,13 +121,13 @@ private JFrame employeeProfile;
 
         panel.add(new JLabel("Phone Number:"), gbc);
         gbc.gridx++;
-         phoneNumber = new JTextField(EmployeeStorage.getInstance().getEmployee().getContact().getPhoneNumber());
+         phoneNumber = new JTextField(EmployeeStorage.getInstance().getEmployee().getContact().getPhoneNumber(), 20);
         panel.add(phoneNumber, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
         panel.add(new JLabel("Email:"), gbc);
         gbc.gridx++;
-         email = new JTextField(EmployeeStorage.getInstance().getEmployee().getContact().getEmail());
+         email = new JTextField(EmployeeStorage.getInstance().getEmployee().getContact().getEmail(), 20);
         panel.add(email, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
@@ -132,6 +136,8 @@ private JFrame employeeProfile;
         JButton updateContact = new JButton("Update Contact");
         updateContact.setBackground(new Color(192, 0, 0));
         updateContact.setForeground(Color.WHITE);
+        updateContact.setBorderPainted(false);
+        updateContact.setFocusPainted(false);
         updateContact.setFont(new Font("Arial", Font.BOLD, 14));
         panel.add(updateContact, gbc);
 
@@ -156,32 +162,32 @@ private JFrame employeeProfile;
 
         panel.add(new JLabel("House Number:"), gbc);
         gbc.gridx++;
-         houseNumber = new JTextField(EmployeeStorage.getInstance().getEmployee().getContact().getAddress().getNumber());
+         houseNumber = new JTextField(EmployeeStorage.getInstance().getEmployee().getContact().getAddress().getNumber(),20);
         panel.add(houseNumber, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
         panel.add(new JLabel("Main Street:"), gbc);
         gbc.gridx++;
-         mainStreet = new JTextField(EmployeeStorage.getInstance().getEmployee().getContact().getAddress().getStreet());
+         mainStreet = new JTextField(EmployeeStorage.getInstance().getEmployee().getContact().getAddress().getStreet(),20);
         panel.add(mainStreet, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
         panel.add(new JLabel("Suburb:"), gbc);
         gbc.gridx++;
-         suburb = new JTextField(EmployeeStorage.getInstance().getEmployee().getContact().getAddress().getSuburb());
+         suburb = new JTextField(EmployeeStorage.getInstance().getEmployee().getContact().getAddress().getSuburb(), 20);
         panel.add(suburb, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
         panel.add(new JLabel("City:"), gbc);
         gbc.gridx++;
-         city = new JTextField(EmployeeStorage.getInstance().getEmployee().getContact().getAddress().getCity());
+        city = new JTextField(EmployeeStorage.getInstance().getEmployee().getContact().getAddress().getCity(), 20);
         panel.add(city, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
         panel.add(new JLabel("Postal Code:"), gbc);
         gbc.gridx++;
-         postalCode = new JTextField(EmployeeStorage.getInstance().getEmployee().getContact().getAddress().getPostalCode());
-        panel.add(new JTextField(EmployeeStorage.getInstance().getEmployee().getContact().getAddress().getPostalCode()), gbc);
+         postalCode = new JTextField(EmployeeStorage.getInstance().getEmployee().getContact().getAddress().getPostalCode(), 20);
+        panel.add(postalCode, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
         gbc.gridwidth = 2;
@@ -189,6 +195,8 @@ private JFrame employeeProfile;
         JButton updateAddress = new JButton("Update Address");
         updateAddress.setBackground(new Color(192, 0, 0));
         updateAddress.setForeground(Color.WHITE);
+        updateAddress.setBorderPainted(false);
+        updateAddress.setFocusPainted(false);
         updateAddress.setFont(new Font("Arial", Font.BOLD, 14));
         panel.add(updateAddress, gbc);
 
@@ -247,6 +255,8 @@ private JFrame employeeProfile;
         JButton updatePasswordButton = new JButton("Update Password");
         updatePasswordButton.setBackground(new Color(192, 0, 0));
         updatePasswordButton.setForeground(Color.WHITE);
+        updatePasswordButton.setBorderPainted(false);
+        updatePasswordButton.setFocusPainted(false);
         updatePasswordButton.setFont(new Font("Arial", Font.BOLD, 14));
         panel.add(updatePasswordButton, gbc);
 
@@ -254,6 +264,8 @@ private JFrame employeeProfile;
         JButton backButton = new JButton("Back");
         backButton.setBackground(new Color(192, 0, 0));
         backButton.setForeground(Color.WHITE);
+        backButton.setBorderPainted(false);
+        backButton.setFocusPainted(false);
         backButton.setFont(new Font("Arial", Font.BOLD, 14));
         panel.add(backButton, gbc);
 
@@ -269,8 +281,12 @@ private JFrame employeeProfile;
                 JOptionPane.showMessageDialog(panel, "Password Does Not Match");
 
             } else {
-                updateEmployeePassword();
-                JOptionPane.showMessageDialog(panel, "Password Updated Successfully");
+                if(Helper.validPassword(new String(confirmPasswordField.getPassword()))){
+                    JOptionPane.showMessageDialog(panel, "Password Too Weak");
+                } else {
+                    updateEmployeePassword();
+                    JOptionPane.showMessageDialog(panel, "Password Updated Successfully");
+                }
             }
         });
 

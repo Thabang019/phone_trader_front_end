@@ -128,11 +128,8 @@ public class Registration {
 
         registration.add(mainPanel, BorderLayout.CENTER);
         newFrame.add(registration);
-        newFrame.setPreferredSize(new Dimension(1360, 800));
-        newFrame.pack();
-        newFrame.setLocationRelativeTo(null);
+        newFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         newFrame.setVisible(true);
-
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
