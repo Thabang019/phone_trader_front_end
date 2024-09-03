@@ -102,6 +102,13 @@ public class ManagerDashboard {
 
             } else if (buttonNames[i].equals("PHONES INVENTORY")) {
                 button.setForeground(Color.WHITE);
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        displayPhones();
+                        jFrame.dispose();
+                    }
+                });
 
             } else if (buttonNames[i].equals("PURCHASED PHONES")) {
                 button.setForeground(Color.WHITE);
@@ -151,6 +158,11 @@ public class ManagerDashboard {
     private void displayEmployees() {
         DisplayEmployee displayEmployee = new DisplayEmployee();
         displayEmployee.DisplayEmployee();
+
+    }
+    private void displayPhones() {
+        PhoneInventory displayPhones = new PhoneInventory();
+        displayPhones.PhoneInventory();
 
     }
 

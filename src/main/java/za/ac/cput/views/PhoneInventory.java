@@ -1,156 +1,206 @@
 package za.ac.cput.views;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import za.ac.cput.domain.Phone;
+import za.ac.cput.dto.TokenStorage;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 
-public class PhoneInventory extends JFrame {
-    private JTable table;
-    private DefaultTableModel tableModel;
+public class PhoneInventory {
+    private JFrame displayInventory;
+    private JPanel mainPanel;
+    private static DefaultTableModel tableModel;
     private JTextField searchField;
-    private OkHttpClient client;
-    private Gson gson;
+    private static final OkHttpClient client = new OkHttpClient();
 
-    public PhoneInventory() {
-        setTitle("Device Inventory");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(900, 600);
-        setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
+    public JFrame PhoneInventory() {
+        displayInventory = new JFrame("Device Inventory");
+        displayInventory.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        displayInventory.setSize(1360, 800);
+        displayInventory.setLocationRelativeTo(null);
+        displayInventory.setLayout(new BorderLayout());
 
-        client = new OkHttpClient();
-        gson = new Gson();
+        mainPanel = new JPanel(new BorderLayout());
 
-        JPanel navPanel = new JPanel(new BorderLayout());
-        navPanel.setBackground(Color.WHITE);
-        navPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        JLabel titleLabel = new JLabel("Find Sale");
+        JPanel topPanel = new JPanel(new BorderLayout());
+        JLabel titleLabel = new JLabel("Device Inventory", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        navPanel.add(titleLabel, BorderLayout.WEST);
+        topPanel.add(titleLabel, BorderLayout.CENTER);
 
-        JPanel searchPanel = new JPanel(new BorderLayout());
-        searchField = new JTextField();
-        searchField.setPreferredSize(new Dimension(400, 30));
-        searchPanel.add(searchField, BorderLayout.CENTER);
-
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel label = new JLabel("Find Phone by IMEI:");
+        searchField = new JTextField(20);
         JButton searchButton = new JButton("Search");
-        searchButton.setBackground(Color.RED.darker());
+        searchButton.setBackground(new Color(192, 0, 0));
         searchButton.setForeground(Color.WHITE);
-        searchButton.setPreferredSize(new Dimension(100, 30));
-        searchPanel.add(searchButton, BorderLayout.EAST);
+        searchPanel.add(label);
+        searchPanel.add(searchField);
+        searchPanel.add(searchButton);
+        topPanel.add(searchPanel, BorderLayout.SOUTH);
 
-        navPanel.add(searchPanel, BorderLayout.CENTER);
-
-        JLabel dateTimeLabel = new JLabel(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm a")));
-        navPanel.add(dateTimeLabel, BorderLayout.EAST);
-
-        add(navPanel, BorderLayout.NORTH);
-
-        JLabel headingLabel = new JLabel("Device Inventory");
-        headingLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        headingLabel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
-        add(headingLabel, BorderLayout.CENTER);
+        mainPanel.add(topPanel, BorderLayout.NORTH);
 
         String[] columnNames = {"IMEI", "Brand", "Model", "Color", "Price", "Status", "Specification", "Condition"};
         tableModel = new DefaultTableModel(columnNames, 0);
-        table = new JTable(tableModel);
+        JTable table = new JTable(tableModel);
         table.setRowHeight(30);
         JScrollPane scrollPane = new JScrollPane(table);
-        add(scrollPane, BorderLayout.SOUTH);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
 
-        setVisible(true);
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton backButton = new JButton("BACK");
+        JButton addButton = new JButton("ADD PHONE");
+        backButton.setBackground(new Color(192, 0, 0));
+        backButton.setForeground(Color.WHITE);
+        backButton.setFont(new Font("Arial", Font.BOLD, 14));
+        addButton.setBackground(new Color(192, 0, 0));
+        addButton.setForeground(Color.WHITE);
+        addButton.setFont(new Font("Arial", Font.BOLD, 14));
+        buttonPanel.add(backButton);
+        buttonPanel.add(addButton);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        tableContents();
+        displayInventory.add(mainPanel);
+        displayInventory.setVisible(true);
 
+        loadAllPhones();
         searchButton.addActionListener(e -> searchByImei());
+
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openManagerDashboard();
+                displayInventory.dispose();
+            }
+        });
+
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openPhoneRegistration();
+                displayInventory.dispose();
+            }
+        });
+
+        return displayInventory;
     }
 
-    private void tableContents() {
-        String url = "http://localhost:8080/phone-trader/phone/getall";
-        Request request = new Request.Builder().url(url).build();
+    private void openManagerDashboard() {
+        ManagerDashboard dashboard = new ManagerDashboard();
+        dashboard.ManagerDashboard();
+    }
 
-        try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful()) {
-                String jsonData = response.body().string();
-                java.lang.reflect.Type listType = new com.google.gson.reflect.TypeToken<List<Phone>>() {}.getType();
-                List<Phone> phones = gson.fromJson(jsonData, listType);
+    private void openPhoneRegistration() {
+        PhoneRegistration registrationForm = new PhoneRegistration();
+        registrationForm.showRegistration();
+    }
 
-                tableModel.setRowCount(0);
+    private void loadAllPhones() {
 
-                for (Phone phone : phones) {
-                    Object[] rowData = {
+        tableModel.setRowCount(0);
+
+        try {
+            final String url = "http://localhost:8080/phone-trader/phones/getall";
+            String responseBody = sendRequest(url);
+
+            if (responseBody.startsWith("[")) {
+                JSONArray phones = new JSONArray(responseBody);
+                Gson gson = new Gson();
+                for (int i = 0; i < phones.length(); i++) {
+                    JSONObject phoneObject = phones.getJSONObject(i);
+                    Phone phone = gson.fromJson(phoneObject.toString(), Phone.class);
+
+                    String specification = phone.getSpecification() != null ? phone.getSpecification().toString() : "null";
+                    String condition = phone.getCondition() != null ? phone.getCondition().toString() : "null";
+
+                    tableModel.addRow(new Object[]{
                             phone.getImei(),
                             phone.getBrand(),
                             phone.getModel(),
                             phone.getColor(),
                             phone.getPrice(),
                             phone.getStatus(),
-                            phone.getSpecification().toString(),
-                            phone.getCondition().toString()
-                    };
-                    tableModel.addRow(rowData);
+                            specification,
+                            condition
+                    });
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "Failed to fetch data from server", "Error", JOptionPane.ERROR_MESSAGE);
+                System.err.println("Expected a JSON array but got: " + responseBody);
             }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch phones", e);
         }
     }
+
 
     private void searchByImei() {
         String imei = searchField.getText().trim();
 
         if (imei.isEmpty()) {
-            tableContents();
+            loadAllPhones();
             return;
         }
 
-        String url = "http://localhost:8080/phone-trader/phone/read/" + imei;
-        Request request = new Request.Builder().url(url).build();
+        try {
+            final String url = "http://localhost:8080/phone-trader/phones/read/" + imei;
 
-        try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful()) {
-                String jsonData = response.body().string();
-                Phone phone = gson.fromJson(jsonData, Phone.class);
+            String responseBody = sendRequest(url);
+
+            if (responseBody != null && !responseBody.isEmpty()) {
+                Gson gson = new GsonBuilder().create();
+                Phone phone = gson.fromJson(responseBody, Phone.class);
+
+                String specification = phone.getSpecification() != null ? phone.getSpecification().toString() : "null";
+                String condition = phone.getCondition() != null ? phone.getCondition().toString() : "null";
 
                 tableModel.setRowCount(0);
 
                 if (phone != null) {
-                    Object[] rowData = {
+                    tableModel.addRow(new Object[]{
                             phone.getImei(),
                             phone.getBrand(),
                             phone.getModel(),
                             phone.getColor(),
                             phone.getPrice(),
                             phone.getStatus(),
-                            phone.getSpecification().toString(),
-                            phone.getCondition().toString()
-                    };
-                    tableModel.addRow(rowData);
+                            specification,
+                            condition
+                    });
                 } else {
-                    JOptionPane.showMessageDialog(this, "No phone found with IMEI: " + imei, "Info", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(displayInventory, "No phone found with IMEI: " + imei, "Info", JOptionPane.INFORMATION_MESSAGE);
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "Failed to fetch data from server", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(displayInventory, "Failed to fetch data from server", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch phone", e);
         }
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(PhoneInventory::new);
+    private String sendRequest(String url) throws IOException {
+        String token = TokenStorage.getInstance().getToken();
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + token)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("Unexpected code " + response);
+            }
+            return response.body().string();
+        }
     }
+
 }
