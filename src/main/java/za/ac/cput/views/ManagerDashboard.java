@@ -51,13 +51,28 @@ public class ManagerDashboard {
 
         navBar.add(logoPanel, BorderLayout.WEST);
         navBar.add(profilePanel, BorderLayout.EAST);
-
-
         managerDashboard.add(navBar, BorderLayout.NORTH);
+
+        JPanel westPanel = new JPanel(new BorderLayout());
+        westPanel.setBackground(new Color(247, 247, 247));
+        JPanel bottom = new JPanel();
+        JButton logoutButton = new JButton("LOGOUT");
+        logoutButton.setBackground(new Color(192, 0, 0));
+        logoutButton.setForeground(Color.WHITE);
+        logoutButton.setBorderPainted(false);
+        logoutButton.setFocusPainted(false);
+        logoutButton.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
+        logoutButton.setFont(new Font("Arial", Font.BOLD, 15));
+        logoutButton.setPreferredSize(new Dimension(120, 35));
+
+        bottom.add(logoutButton);
+        westPanel.add(bottom, BorderLayout.SOUTH);
+
+        managerDashboard.add(westPanel, BorderLayout.WEST);
+
         jFrame.add(managerDashboard);
         jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         jFrame.setVisible(true);
-
 
         JPanel centerPanel = new JPanel();
         centerPanel.setBackground(new Color(247, 247, 247));
@@ -73,8 +88,20 @@ public class ManagerDashboard {
             }
         });
 
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int confirm = JOptionPane.showConfirmDialog(managerDashboard, "Are you sure you want to log out?", "Log Out", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    jFrame.dispose();
+                    Welcome welcome = new Welcome();
+                    welcome.Welcome();
+                }
+            }
+        });
 
-        String[] buttonNames = {"EMPLOYEES", "PHONE SALES", "PHONES INVENTORY", "PURCHASED PHONES", "ACCESSORIES", "RETURNS", "CUSTOMERS", "LOGOUT"};
+
+        String[] buttonNames = {"EMPLOYEES", "PHONE SALES", "PHONES INVENTORY", "PURCHASED PHONES", "RETURNS", "CUSTOMERS"};
 
         for (int i = 0; i < buttonNames.length; i++) {
             JButton button = new JButton(buttonNames[i]);
@@ -112,28 +139,11 @@ public class ManagerDashboard {
             } else if (buttonNames[i].equals("PURCHASED PHONES")) {
                 button.setForeground(Color.WHITE);
 
-            } else if (buttonNames[i].equals("ACCESSORIES")) {
-                button.setForeground(Color.WHITE);
-
-            } else if (buttonNames[i].equals("RETURNS")) {
+           } else if (buttonNames[i].equals("RETURNS")) {
                 button.setForeground(Color.WHITE);
 
             } else if (buttonNames[i].equals("CUSTOMERS")) {
                 button.setForeground(Color.WHITE);
-
-            } else if (buttonNames[i].equals("LOGOUT")) {
-                button.setForeground(Color.RED);
-                button.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        int confirm = JOptionPane.showConfirmDialog(managerDashboard, "Are you sure you want to log out?", "Log Out", JOptionPane.YES_NO_OPTION);
-                        if (confirm == JOptionPane.YES_OPTION) {
-                            jFrame.dispose();
-                            Welcome welcome = new Welcome();
-                            welcome.Welcome();
-                        }
-                    }
-                });
             }
 
             gbc.gridx = i % 3;
@@ -172,7 +182,5 @@ public class ManagerDashboard {
         displayPhones.PhoneInventory();
 
     }
-
-
 }
 

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import za.ac.cput.domain.Accessory;
 import za.ac.cput.domain.Phone;
 import za.ac.cput.dto.TokenStorage;
 import za.ac.cput.util.ImeiStorage;
@@ -23,11 +22,9 @@ public class SalesPersonSellPage extends JFrame {
     private Phone phone;
     private JTextField identityNumberField, firstNameField, middleNameField, lastNameField, emailField, phoneNumberField, alternativeNumberField;
     private JTextField streetNumberField, streetNameField, suburbField, cityField, postalCodeField;
-    private Accessory accessory;
     public SalesPersonSellPage() throws IOException {
 
         phone = findPhone("http://localhost:8080/phone-trader/phones/read/" + ImeiStorage.getInstance().getImei());
-        accessory = findAccessory("http://localhost:8080/phone-trader/accessory/findbyphone/" + phone.getImei());
 
         // Create the main container panel
         JPanel mainContainer = new JPanel();
@@ -80,20 +77,6 @@ public class SalesPersonSellPage extends JFrame {
         phoneDetailsPanel.add(createLabel("Wireless charging:"));
         phoneDetailsPanel.add(createTextField(phone.getSpecification().getWirelessCharging()));
 
-        // Add fields for accessories
-        if (accessory == null) {
-            phoneDetailsPanel.setBorder(BorderFactory.createTitledBorder("Phone Details"));
-            phoneDetailsPanel.add(createLabel("Name:"));
-            phoneDetailsPanel.add(createTextField(""));
-            phoneDetailsPanel.add(createLabel("Description:"));
-            phoneDetailsPanel.add(createTextField(""));
-        } else {
-            phoneDetailsPanel.setBorder(BorderFactory.createTitledBorder("Phone Details"));
-            phoneDetailsPanel.add(createLabel("Name:"));
-            phoneDetailsPanel.add(createTextField(accessory.getName()));
-            phoneDetailsPanel.add(createLabel("Description:"));
-            phoneDetailsPanel.add(createTextField(accessory.getDescription()));
-        }
         // Add Phone Details panel to content panel
         contentPanel.add(phoneDetailsPanel);
 
@@ -233,23 +216,6 @@ public class SalesPersonSellPage extends JFrame {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful()) {
                 return gson.fromJson(response.body().string(), Phone.class);
-            } else {
-                throw new IOException("Unexpected code " + response);
-            }
-        }
-    }
-
-    public Accessory findAccessory(String url) throws IOException {
-        String token = TokenStorage.getInstance().getToken();
-        requestAccessory = new Request.Builder()
-                .url(url)
-                .header("Authorization", "Bearer " + token)
-                .get()
-                .build();
-
-        try (Response response = client.newCall(requestAccessory).execute()) {
-            if (response.isSuccessful()) {
-                return gson.fromJson(response.body().string(), Accessory.class);
             } else {
                 throw new IOException("Unexpected code " + response);
             }
