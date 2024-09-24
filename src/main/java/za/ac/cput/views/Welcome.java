@@ -1,5 +1,7 @@
 package za.ac.cput.views;
 
+import za.ac.cput.util.BackgroundImage;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,15 +18,15 @@ public class Welcome {
         JPanel leftPanel = new JPanel();
         leftPanel.setBackground(new Color(192, 0, 0));
         leftPanel.setLayout(new GridBagLayout());
-        leftPanel.setPreferredSize(new Dimension(300, 450));
+        leftPanel.setPreferredSize(new Dimension(400, 450));
 
         JLabel titleLabel = new JLabel("Phone Trader");
         titleLabel.setForeground(Color.WHITE);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 38));
 
         JLabel descriptionLabel = new JLabel("Turn Old into Bold.");
         descriptionLabel.setForeground(Color.WHITE);
-        descriptionLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        descriptionLabel.setFont(new Font("Arial", Font.PLAIN, 20));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -36,12 +38,12 @@ public class Welcome {
         gbc.insets = new Insets(20, 0, 0, 0);
         leftPanel.add(descriptionLabel, gbc);
 
-        JPanel rightPanel = new JPanel();
+        JPanel rightPanel = new BackgroundImage("pic/welcome.png");
         rightPanel.setBackground(Color.WHITE);
         rightPanel.setLayout(new GridBagLayout());
 
         JLabel welcomeLabel = new JLabel("Welcome Back");
-        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 28));
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 48));
         welcomeLabel.setForeground(Color.BLACK);
 
         JButton loginButton = new JButton("Login");
@@ -49,6 +51,7 @@ public class Welcome {
         loginButton.setForeground(Color.WHITE);
         loginButton.setBorderPainted(false);
         loginButton.setFocusPainted(false);
+        loginButton.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
         loginButton.setFont(new Font("Arial", Font.BOLD, 15));
         loginButton.setPreferredSize(new Dimension(120, 35));
 
@@ -60,7 +63,6 @@ public class Welcome {
         rightPanel.add(loginButton, gbc);
 
         welcomePanel.setLayout(new BorderLayout());
-        welcomePanel.add(leftPanel, BorderLayout.WEST);
         welcomePanel.add(rightPanel, BorderLayout.CENTER);
         welcomeFrame.add(welcomePanel);
         welcomeFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -72,9 +74,9 @@ public class Welcome {
             public void actionPerformed(ActionEvent e) {
                 openLogin();
                 welcomeFrame.dispose();
-                //welcomePanel.setVisible(false);
             }
         });
+
         return welcomeFrame;
     }
 
@@ -82,5 +84,4 @@ public class Welcome {
         Login loginForm = new Login();
         loginForm.Login();
     }
-
 }
