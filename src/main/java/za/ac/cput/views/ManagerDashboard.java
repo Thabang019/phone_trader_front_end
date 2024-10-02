@@ -144,6 +144,13 @@ public class ManagerDashboard {
 
             } else if (buttonNames[i].equals("CUSTOMERS")) {
                 button.setForeground(Color.WHITE);
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                            displayCustomers();
+                            jFrame.dispose();
+                    }
+                });
             }
 
             gbc.gridx = i % 3;
@@ -182,5 +189,10 @@ public class ManagerDashboard {
         displayPhones.PhoneInventory();
 
     }
+    private void displayCustomers() {
+        CustomerPage customers = new CustomerPage();
+        customers.setCustomerPage();
+    }
+
 }
 
