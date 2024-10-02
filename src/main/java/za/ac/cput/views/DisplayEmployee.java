@@ -15,13 +15,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-public class  DisplayEmployee {
-   private JFrame displayEmployee;
+public class DisplayEmployee {
     private JPanel mainPanel;
     private static DefaultTableModel model;
     private static final OkHttpClient client = new OkHttpClient();
-    public JFrame DisplayEmployee(){
-        displayEmployee = new JFrame();
+    public DisplayEmployee(){
+
         mainPanel = new JPanel(new BorderLayout());
         JPanel topPanel = new JPanel(new BorderLayout());
         JLabel title = new JLabel("EMPLOYEES", JLabel.CENTER);
@@ -29,20 +28,18 @@ public class  DisplayEmployee {
         title.setForeground(new Color(192, 0, 0));
         topPanel.add(title, BorderLayout.CENTER);
 
-
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel label = new JLabel("Find Employee By Employee ID");
-        JTextField searchField2 = new JTextField(20);
+        JTextField searchField = new JTextField(20);
         JButton searchButton = new JButton("Search");
         searchButton.setBackground(new Color(192, 0, 0));
         searchButton.setForeground(Color.WHITE);
         searchPanel.add(label);
-        searchPanel.add(searchField2);
+        searchPanel.add(searchField);
         searchPanel.add(searchButton);
 
 
@@ -56,7 +53,7 @@ public class  DisplayEmployee {
         table.getTableHeader().setBackground(new Color(192, 0, 0));
         table.getTableHeader().setForeground(Color.WHITE);
         JScrollPane scrollPane = new JScrollPane(table);
-        tablePanel.add(scrollPane, BorderLayout.CENTER);
+        tablePanel.add(scrollPane);
         tablePanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
 
@@ -82,7 +79,6 @@ public class  DisplayEmployee {
             @Override
             public void actionPerformed(ActionEvent e) {
                 openManagerDashboard();
-                displayEmployee.dispose();
 
             }});
 
@@ -90,18 +86,18 @@ public class  DisplayEmployee {
             @Override
             public void actionPerformed(ActionEvent e) {
                 openRegistration();
-                displayEmployee.dispose();
             }
         });
 
         mainPanel.add(topPanel, BorderLayout.NORTH);
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
-        displayEmployee.add(mainPanel);
-        displayEmployee.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        displayEmployee.setVisible(true);
+        mainPanel.add(centerPanel);
+
         
         getAll();
-        return displayEmployee;
+    }
+
+    public JPanel getDisplayEmployee(){
+        return mainPanel;
     }
 
 

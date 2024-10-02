@@ -1,9 +1,6 @@
 package za.ac.cput;
 
-import za.ac.cput.views.DisplayEmployee;
-import za.ac.cput.views.Login;
-import za.ac.cput.views.Registration;
-import za.ac.cput.views.Welcome;
+import za.ac.cput.views.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

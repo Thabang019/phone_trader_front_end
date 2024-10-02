@@ -14,7 +14,7 @@ import java.awt.*;
 import java.io.IOException;
 
 
-public class EmployeeProfile extends JPanel {
+public class  EmployeeProfile extends JPanel {
     private JFrame employeeProfile;
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     final OkHttpClient client = new OkHttpClient();
