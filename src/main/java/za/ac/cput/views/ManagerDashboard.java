@@ -101,7 +101,6 @@ public class ManagerDashboard {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     centerPanel.removeAll();
-
                     if (buttonName.equals("EMPLOYEES")) {
                         displayEmployees();
                     } else if (buttonName.equals("CUSTOMERS")) {
@@ -113,7 +112,6 @@ public class ManagerDashboard {
                     } else if (buttonName.equals("RETURNS")) {
                         displayReturns();
                     }
-
                     centerPanel.revalidate();
                     centerPanel.repaint();
                 }
@@ -168,5 +166,10 @@ public class ManagerDashboard {
         centerPanel.removeAll();
         centerPanel.add(displayEmployee.getDisplayEmployee());
     }
+    private void displayCustomers() {
+        CustomerPage customers = new CustomerPage();
+        customers.setCustomerPage();
+    }
+
 }
 
