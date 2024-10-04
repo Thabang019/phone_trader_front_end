@@ -9,7 +9,6 @@ import za.ac.cput.dto.TokenStorage;
 import za.ac.cput.util.ImeiStorage;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +21,7 @@ public class SalesPersonSellPage extends JFrame {
     private Phone phone;
     private JTextField identityNumberField, firstNameField, middleNameField, lastNameField, emailField, phoneNumberField, alternativeNumberField;
     private JTextField streetNumberField, streetNameField, suburbField, cityField, postalCodeField;
+
     public SalesPersonSellPage() throws IOException {
 
         phone = findPhone("http://localhost:8080/phone-trader/phones/read/" + ImeiStorage.getInstance().getImei());
@@ -42,7 +42,7 @@ public class SalesPersonSellPage extends JFrame {
 
         // Add fields for phone details
         phoneDetailsPanel.add(createLabel("IMEI Number:"));
-        phoneDetailsPanel.add(createTextField(phone.getImei()));
+        phoneDetailsPanel.add(createTextField(String.valueOf(phone.getImei())));
         phoneDetailsPanel.add(createLabel("Brand:"));
         phoneDetailsPanel.add(createTextField(phone.getBrand()));
         phoneDetailsPanel.add(createLabel("Model:"));
@@ -83,9 +83,7 @@ public class SalesPersonSellPage extends JFrame {
         // Create the Customer Details panel
         JPanel customerDetailsPanel = new JPanel();
         customerDetailsPanel.setLayout(new GridLayout(0, 2, 10, 10));
-        TitledBorder border = BorderFactory.createTitledBorder("Customer Details");
-        border.setTitleColor(new Color(192, 0, 0));
-        customerDetailsPanel.setBorder(border);
+        customerDetailsPanel.setBorder(BorderFactory.createTitledBorder("Customer Details"));
 
         customerDetailsPanel.add(createLabel("Identity Number:"));
         identityNumberField = new JTextField();
@@ -141,25 +139,30 @@ public class SalesPersonSellPage extends JFrame {
         mainContainer.add(contentPanel, BorderLayout.CENTER);
 
         // Create the Sell button and add it to the bottom of the main container
-        JPanel buttonPanel = new JPanel();
-        JButton sellButton = new JButton("SELL");
-        sellButton.setBackground(Color.RED);
-        sellButton.setForeground(Color.WHITE);
-        sellButton.setFocusPainted(false);
-        sellButton.setContentAreaFilled(false);
-        sellButton.setOpaque(true);
-
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton backButton = new JButton("BACK");
-        backButton.setBackground(Color.RED);
+        backButton.setBackground(new Color(192, 0, 0));
         backButton.setForeground(Color.WHITE);
-        backButton.setFocusPainted(false);
-        backButton.setContentAreaFilled(false);
-        backButton.setOpaque(true);
-        buttonPanel.add(sellButton);
+        backButton.setFont(new Font("Arial", Font.BOLD, 14));
         buttonPanel.add(backButton);
+        JButton sellButton = new JButton("SELL");
+        sellButton.setBackground(new Color(192, 0, 0));
+        sellButton.setForeground(Color.WHITE);
+        sellButton.setFont(new Font("Arial", Font.BOLD, 14));
+        buttonPanel.add(sellButton);
 
         // Add button panel to the main container
         mainContainer.add(buttonPanel, BorderLayout.SOUTH);
+
+        backButton.addActionListener(new ActionListener() {
+
+            // ActionListener for the back button
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openSalesPersonDashboard();
+                dispose();
+
+            }});
 
         // ActionListener for the Sell button
         sellButton.addActionListener(new ActionListener() {
@@ -171,27 +174,18 @@ public class SalesPersonSellPage extends JFrame {
             }
         });
 
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == backButton) {
-                    SalesPersonDashboard salesPersonDashboard = new SalesPersonDashboard();
-                    try {
-                        SalesPersonSellPage sales = new SalesPersonSellPage();
-                        sales.dispose();
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-
-                }
-            }
-        });
-
         // Add main container to the frame
         add(mainContainer);
         setTitle("Phone Details");
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible(true);
+        setPreferredSize(new Dimension(1000, 700));
+        pack();
+        setLocationRelativeTo(null);
+    }
+    private void openSalesPersonDashboard() {
+        SalesPersonDashboard board = new SalesPersonDashboard();
+        setVisible(true);
+
     }
     private JLabel createLabel(String labelText) {
         JLabel label = new JLabel(labelText);
@@ -221,6 +215,7 @@ public class SalesPersonSellPage extends JFrame {
             }
         }
     }
+
 }
 
 

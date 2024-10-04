@@ -179,10 +179,9 @@ public class PhoneRegistration {
         }
         return null;
     }
-
     private void cancelButtonPressed() {
-        PhoneInventory inventory = new PhoneInventory();
-        inventory.PhoneInventory();
+        ManagerDashboard inventory = new ManagerDashboard();
+        inventory.ManagerDashboard();
         frame.dispose();
     }
 
