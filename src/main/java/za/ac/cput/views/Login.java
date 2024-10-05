@@ -195,13 +195,21 @@ public class Login {
             }
         }
     }
+
     private void openSalesPersonDashboard() {
         SalesPersonDashboard salesPersonDashboard = new SalesPersonDashboard();
+        salesPersonDashboard.setVisible(true);
     }
     private void openManagerDashboard() {
         ManagerDashboard managerDashboard = new ManagerDashboard();
         managerDashboard.ManagerDashboard();
     }
+    /*public void run() {
+        SwingUtilities.invokeLater(() -> {
+            SalesPersonDashboard frame = new SalesPersonDashboard();
+            frame.setVisible(true);
+        });
+    }*/
 }
 
 
