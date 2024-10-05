@@ -43,6 +43,8 @@ public class MerchantDashboard {
             .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter())
             .create();
 
+
+
     public MerchantDashboard() {
         initialize();
     }
@@ -109,17 +111,24 @@ public class MerchantDashboard {
 
                             Phone.Condition condition1 = Phone.Condition.valueOf(conditionDropdown.getSelectedItem().toString());
                             Phone phone = PhoneFactory.createPhone(imeiField.getText(), brandDropdown.getSelectedItem().toString(), modelField.getText(), colorDropdown.getSelectedItem().toString(), price, "available", spec, Phone.Condition.NEW);
-                            Address address = AddressFactory.buildAddress("123","New Market","Woodstock","Cape Town","7750");
                             System.out.println(phone);
+
+
+                            Address address = AddressFactory.buildAddress("123","New Market","Woodstock","Cape Town","7750");
                             Contact contact = ContactFactory.createContact("0789456123","email@gmail.com",address);
+
                             Purchase purchase = PurchaseFactory.createPurchase(LocalDate.now(), LocalTime.now(), EmployeeStorage.getInstance().getEmployee(), 1200, "cash", phone);
                             ArrayList<Purchase> purchaseList = new ArrayList<>();
                             purchaseList.add(purchase);
-                            Seller seller = SellerFactory.createSeller("3241","Okuhle", "Kwanele", "Gebashe",contact, purchaseList);
                             System.out.println(purchase);
+
+                            Seller seller = SellerFactory.createSeller("3241","Okuhle", "Kwanele", "Gebashe",contact, purchaseList);
+                            System.out.println(seller);
 
                             String response = createSeller("http://localhost:8080/phone-trader/seller/save", seller );
                             System.out.println(response);
+
+                            System.out.println(gson);
 
                             JOptionPane.showMessageDialog(frame, "Purchase successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         } catch (Exception ex) {
