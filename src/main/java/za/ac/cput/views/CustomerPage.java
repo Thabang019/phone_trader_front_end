@@ -22,7 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class CustomerPage extends JFrame {
+public class CustomerPage {
 
     private JLabel customersLabel, buyersLabel, sellersLabel;
     private JPanel mainPanel;
@@ -47,14 +47,6 @@ public class CustomerPage extends JFrame {
         sellersTableModel = new DefaultTableModel(sellerColumns, 0);
         sellersTable = new JTable(sellersTableModel);
         sellerScrollPane = new JScrollPane(sellersTable);
-    }
-
-    public void setCustomerPage(){
-
-        setTitle("Customer Page View");
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
 
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
@@ -85,9 +77,6 @@ public class CustomerPage extends JFrame {
         sellersTable.getTableHeader().setForeground(Color.WHITE);
 
         mainPanel.add(sellerScrollPane);
-
-        add(mainPanel, BorderLayout.CENTER);
-        setVisible(true);
 
         loadSellers();
         loadBuyers();
@@ -182,5 +171,9 @@ public class CustomerPage extends JFrame {
             }
             return response.body().string();
         }
+    }
+
+    public JPanel getCustomers(){
+        return mainPanel;
     }
 }

@@ -262,11 +262,6 @@ public class MerchantDashboard {
         return post(url, json);
     }
 
-    public String createPurchase(String url, Purchase purchase) throws IOException {
-        String json = gson.toJson(purchase);
-        return post(url, json);
-    }
-
     public String post(String url, String json) throws IOException {
         String token = TokenStorage.getInstance().getToken();
         RequestBody body = RequestBody.create(json, JSON);

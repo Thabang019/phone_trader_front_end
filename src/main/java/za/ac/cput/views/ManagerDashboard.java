@@ -131,11 +131,6 @@ public class ManagerDashboard {
         return jFrame;
     }
 
-    private void displayCustomers() {
-        JLabel label = new JLabel("CUSTOMERS section is under construction");
-        centerPanel.add(label, BorderLayout.CENTER);
-    }
-
     private void displayPurchasesAndSales() {
         JLabel label = new JLabel("PURCHASES & SALES section is under construction");
         centerPanel.add(label, BorderLayout.CENTER);
@@ -168,7 +163,8 @@ public class ManagerDashboard {
     }
     private void displayCustomers() {
         CustomerPage customers = new CustomerPage();
-        customers.setCustomerPage();
+        centerPanel.removeAll();
+        centerPanel.add(customers.getCustomers());
     }
 
 }

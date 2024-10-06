@@ -39,34 +39,67 @@ public class SalesPersonDashboard extends JFrame {
         mainContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Search bar panel
-        JPanel searchBarPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel searchBarPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         searchField = new JTextField(20);
         JButton searchButton = new JButton("Search");
-        searchButton.setBackground(Color.RED);
+        searchButton.setBackground(new Color(192, 0, 0));
         searchButton.setForeground(Color.WHITE);
+        searchButton.setBorderPainted(false);
+        searchButton.setFocusPainted(false);
+        searchButton.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
+        searchButton.setFont(new Font("Arial", Font.BOLD, 15));
+        searchButton.setPreferredSize(new Dimension(120, 35));
         searchBarPanel.add(new JLabel("Find Phone"));
         searchBarPanel.add(searchField);
         searchBarPanel.add(searchButton);
-        mainContainer.add(searchBarPanel, BorderLayout.NORTH);
+
 
         // Filter buttons panel
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel buttonPanel = new JPanel(new BorderLayout());
+        JPanel centerButton = new JPanel();
+        centerButton.setLayout(new BoxLayout(centerButton, BoxLayout.Y_AXIS));
         JButton iphoneButton = new JButton("iPhone");
+        iphoneButton.setBackground(new Color(192, 0, 0));
+        iphoneButton.setForeground(Color.WHITE);
+        iphoneButton.setBorderPainted(false);
+        iphoneButton.setFocusPainted(false);
+        iphoneButton.setFont(new Font("Arial", Font.BOLD, 15));
+        iphoneButton.setPreferredSize(new Dimension(120, 35));
+
         JButton androidButton = new JButton("Android");
+        androidButton.setBackground(new Color(192, 0, 0));
+        androidButton.setForeground(Color.WHITE);
+        androidButton.setBorderPainted(false);
+        androidButton.setFocusPainted(false);
+        androidButton.setFont(new Font("Arial", Font.BOLD, 15));
+        androidButton.setPreferredSize(new Dimension(120, 35));
+
         JButton collectionButton = new JButton("Collection");
-        buttonPanel.add(iphoneButton);
-        buttonPanel.add(androidButton);
-        buttonPanel.add(collectionButton);
-        mainContainer.add(buttonPanel, BorderLayout.CENTER);
+        collectionButton.setBackground(new Color(192, 0, 0));
+        collectionButton.setForeground(Color.WHITE);
+        collectionButton.setBorderPainted(false);
+        collectionButton.setFocusPainted(false);
+        collectionButton.setFont(new Font("Arial", Font.BOLD, 15));
+        collectionButton.setPreferredSize(new Dimension(120, 35));
+
+        centerButton.add(Box.createRigidArea(new Dimension(0, 30)));
+        centerButton.add(iphoneButton);
+        centerButton.add(Box.createRigidArea(new Dimension(0, 15)));
+        centerButton.add(androidButton);
+        centerButton.add(Box.createRigidArea(new Dimension(0, 15)));
+        centerButton.add(collectionButton);
+        centerButton.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        mainContainer.add(searchBarPanel, BorderLayout.NORTH);
+        buttonPanel.add(centerButton, BorderLayout.CENTER);
+        mainContainer.add(buttonPanel, BorderLayout.WEST);
 
         // Iphone button actionListener
         iphoneButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 findByBrand("iPhone");
             }
-
             private void findByBrand(String brand) {
                 try {
                     final String url = "http://localhost:8080/phone-trader/phones/getall"; // Or use an appropriate endpoint
@@ -103,12 +136,10 @@ public class SalesPersonDashboard extends JFrame {
 
         // Android button actionListener
         androidButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 findByOS("Android");
             }
-
             private void findByOS(String os) {
                 try {
                     final String url = "http://localhost:8080/phone-trader/phones/getall"; // Or use an appropriate endpoint
@@ -187,8 +218,6 @@ public class SalesPersonDashboard extends JFrame {
 
         // Collection button actionListener
         collectionButton.addActionListener(new ActionListener() {
-
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 getAllPhones(tableModel);
@@ -217,7 +246,7 @@ public class SalesPersonDashboard extends JFrame {
         phoneTable.getColumn("NO").setCellEditor(new ButtonEditor(new JCheckBox()));
 
         JScrollPane scrollPane = new JScrollPane(phoneTable);
-        mainContainer.add(scrollPane, BorderLayout.SOUTH);
+        mainContainer.add(scrollPane, BorderLayout.CENTER);
         add(mainContainer);
 
         // Fetch and display phones

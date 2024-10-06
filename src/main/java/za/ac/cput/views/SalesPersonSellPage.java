@@ -1,23 +1,38 @@
 package za.ac.cput.views;
 
 import com.google.gson.Gson;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import za.ac.cput.domain.Phone;
+import com.google.gson.GsonBuilder;
+import okhttp3.*;
+import za.ac.cput.domain.*;
+import za.ac.cput.domain.Address;
+import za.ac.cput.dto.EmployeeStorage;
 import za.ac.cput.dto.TokenStorage;
+import za.ac.cput.factory.*;
 import za.ac.cput.util.ImeiStorage;
+import za.ac.cput.util.LocalDateTimeTypeAdapter;
+import za.ac.cput.util.LocalDateTypeAdapter;
+import za.ac.cput.util.LocalTimeTypeAdapter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class SalesPersonSellPage extends JFrame {
     private final OkHttpClient client = new OkHttpClient();
-    private Request request, requestAccessory;
-    private final Gson gson = new Gson();
+    private Request request;
+
+    private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    private final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+            .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter())
+            .create();
     private Phone phone;
     private JTextField identityNumberField, firstNameField, middleNameField, lastNameField, emailField, phoneNumberField, alternativeNumberField;
     private JTextField streetNumberField, streetNameField, suburbField, cityField, postalCodeField;
@@ -169,7 +184,45 @@ public class SalesPersonSellPage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == sellButton) {
-                    JOptionPane.showMessageDialog(sellButton, "Phone sold!");
+
+                    String idNumber =  identityNumberField.getText();
+                    String firstName = firstNameField.getText();
+                    String middleName = middleNameField.getText();
+                    String lastName = lastNameField.getText();
+                    String email = emailField.getText();
+                    String phoneNumber = phoneNumberField.getText();
+                    String city = cityField.getText();
+                    String postalCode = postalCodeField.getText();
+                    String suburb = suburbField.getText();
+                    String houseNumber = streetNumberField.getText();
+                    String streetNumber = streetNameField.getText();
+
+                    Address address = AddressFactory.buildAddress(houseNumber, streetNumber, suburb, city, postalCode);
+
+                    System.out.println(address);
+
+                    Contact contact = ContactFactory.createContact(phoneNumber, email, address);
+
+                    System.out.println(contact);
+
+                    double amount = phone.getPrice();
+                    Sale sale = SaleFactory.createSale(LocalDate.now(), LocalTime.now(), EmployeeStorage.getInstance().getEmployee(), phone, "cash",amount);
+                    ArrayList<Sale> saleList = new ArrayList<>();
+                    saleList.add(sale);
+                    System.out.println(sale);
+
+                    Buyer buyer = BuyerFactory.createBuyer(idNumber,firstName, middleName, lastName,contact, saleList);
+                    System.out.println(buyer);
+
+                    String response = null;
+                    try {
+                        response = createBuyer("http://localhost:8080/phone-trader/buyer/save", buyer);
+                        System.out.println(response);
+                        JOptionPane.showMessageDialog(sellButton, "Phone sold!");
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(sellButton, "Transaction unsuccessful!");
+                    }
+
                 }
             }
         });
@@ -215,6 +268,28 @@ public class SalesPersonSellPage extends JFrame {
             }
         }
     }
+
+    public String createBuyer(String url, Buyer buyer) throws IOException {
+        String json = gson.toJson(buyer);
+        return post(url, json);
+    }
+
+    public String post(String url, String json) throws IOException {
+        String token = TokenStorage.getInstance().getToken();
+        RequestBody body = RequestBody.create(json, JSON);
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + token)
+                .post(body)
+                .build();
+        try (Response response = client.newCall(request).execute()) {
+            return response.body().string();
+        } catch (Exception ex){
+            System.out.println("Failed");
+        }
+        return token;
+    }
+
 
 }
 

@@ -204,12 +204,6 @@ public class Login {
         ManagerDashboard managerDashboard = new ManagerDashboard();
         managerDashboard.ManagerDashboard();
     }
-    /*public void run() {
-        SwingUtilities.invokeLater(() -> {
-            SalesPersonDashboard frame = new SalesPersonDashboard();
-            frame.setVisible(true);
-        });
-    }*/
 }
 
 
