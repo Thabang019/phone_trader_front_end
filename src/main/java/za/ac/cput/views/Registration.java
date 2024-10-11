@@ -56,16 +56,13 @@ public class Registration {
 
         personalPanel.add(new JLabel("Role*:"));
         JPanel rolePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JRadioButton sellerButton = new JRadioButton("Seller");
-        JRadioButton buyerButton = new JRadioButton("Buyer");
+        JRadioButton sellerButton = new JRadioButton("Salseperson");
         JRadioButton managerButton = new JRadioButton("Manager");
 
         ButtonGroup roleGroup = new ButtonGroup();
         roleGroup.add(sellerButton);
-        roleGroup.add(buyerButton);
         roleGroup.add(managerButton);
         rolePanel.add(sellerButton);
-        rolePanel.add(buyerButton);
         rolePanel.add(managerButton);
         personalPanel.add(rolePanel);
 
@@ -158,8 +155,7 @@ public class Registration {
 
                     if (sellerButton.isSelected()) {
                         role = Employee.Role.Salesperson;
-                    } else if (buyerButton.isSelected()) {
-                        role = Employee.Role.Buyer;
+
                     } else if (managerButton.isSelected()) {
                         role = Employee.Role.Manager;
                     }

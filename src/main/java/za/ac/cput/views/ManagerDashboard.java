@@ -132,19 +132,27 @@ public class ManagerDashboard {
     }
 
     private void displayPurchasesAndSales() {
-        JLabel label = new JLabel("PURCHASES & SALES section is under construction");
-        centerPanel.add(label, BorderLayout.CENTER);
+        PhoneStatisticsView statisticsView = new PhoneStatisticsView();
+        centerPanel.removeAll();
+        centerPanel.add(statisticsView.getStatistics());
+        centerPanel.revalidate();
+        centerPanel.repaint();
     }
 
     private void displayInventory() {
         PhoneInventory phoneInventory = new PhoneInventory();
         centerPanel.removeAll();
         centerPanel.add(phoneInventory.getPhoneInventory());
+        centerPanel.revalidate();
+        centerPanel.repaint();
     }
 
     private void displayReturns() {
-        JLabel label = new JLabel("RETURNS section is under construction");
-        centerPanel.add(label, BorderLayout.CENTER);
+        ReturnInventory returnInventory = new ReturnInventory();
+        centerPanel.removeAll();
+        centerPanel.add(returnInventory.getReturn());
+        centerPanel.revalidate();
+        centerPanel.repaint();
     }
 
     private void displayProfile() {
