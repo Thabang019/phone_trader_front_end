@@ -18,12 +18,18 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class PhoneInventory {
+    private JFrame displayInventory;
     private JPanel mainPanel;
     private static DefaultTableModel tableModel;
     private JTextField searchField;
     private static final OkHttpClient client = new OkHttpClient();
 
-    public PhoneInventory() {
+    public JFrame PhoneInventory() {
+        displayInventory = new JFrame("Device Inventory");
+        displayInventory.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        displayInventory.setVisible(true);
+        displayInventory.setLayout(new BorderLayout());
+
         mainPanel = new JPanel(new BorderLayout());
 
         JPanel topPanel = new JPanel(new BorderLayout());
@@ -67,6 +73,8 @@ public class PhoneInventory {
         buttonPanel.add(addButton);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
+        displayInventory.add(mainPanel);
+        displayInventory.setVisible(true);
 
         loadAllPhones();
         searchButton.addActionListener(e -> searchByImei());
@@ -75,6 +83,7 @@ public class PhoneInventory {
             @Override
             public void actionPerformed(ActionEvent e) {
                 openManagerDashboard();
+                displayInventory.dispose();
             }
         });
 
@@ -82,8 +91,11 @@ public class PhoneInventory {
             @Override
             public void actionPerformed(ActionEvent e) {
                 openPhoneRegistration();
+                displayInventory.dispose();
             }
         });
+
+        return displayInventory;
     }
 
     private void openManagerDashboard() {
@@ -166,10 +178,10 @@ public class PhoneInventory {
                             condition
                     });
                 } else {
-                    JOptionPane.showMessageDialog(mainPanel, "No phone found with IMEI: " + imei, "Info", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(displayInventory, "No phone found with IMEI: " + imei, "Info", JOptionPane.INFORMATION_MESSAGE);
                 }
             } else {
-                JOptionPane.showMessageDialog(mainPanel, "Failed to fetch data from server", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(displayInventory, "Failed to fetch data from server", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to fetch phone", e);
@@ -190,8 +202,8 @@ public class PhoneInventory {
             return response.body().string();
         }
     }
-
     public JPanel getPhoneInventory(){
         return mainPanel;
     }
 }
+

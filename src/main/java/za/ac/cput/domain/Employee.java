@@ -15,7 +15,7 @@ public class Employee {
     public enum Role {
         Manager,
         Salesperson,
-        Buyer,
+
     }
 
     private Employee(Builder builder) {
