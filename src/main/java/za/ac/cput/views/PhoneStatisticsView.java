@@ -8,21 +8,30 @@ import org.json.JSONObject;
 import za.ac.cput.domain.Sale;
 import za.ac.cput.domain.Purchase;
 import za.ac.cput.dto.TokenStorage;
+import za.ac.cput.util.LocalDateTimeTypeAdapter;
+import za.ac.cput.util.LocalDateTypeAdapter;
+import za.ac.cput.util.LocalTimeTypeAdapter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class PhoneStatisticsView {
-    private JFrame phoneStatisticsFrame;
     private JPanel mainPanel;
     private static DefaultTableModel salesModel;
     private static DefaultTableModel purchasesModel;
     private static final OkHttpClient client = new OkHttpClient();
+    private static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+            .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter())
+            .create();
 
-    public JFrame PhoneStatisticsView() {
-        phoneStatisticsFrame = new JFrame();
+    public PhoneStatisticsView() {
         mainPanel = new JPanel(new BorderLayout());
 
         JPanel topPanel = new JPanel(new BorderLayout());
@@ -65,29 +74,23 @@ public class PhoneStatisticsView {
 
         mainPanel.add(topPanel, BorderLayout.NORTH);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
-        phoneStatisticsFrame.add(mainPanel);
-        phoneStatisticsFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        phoneStatisticsFrame.setVisible(true);
-
 
         getSalesStatistics();
         getPurchasesStatistics();
-
-        return phoneStatisticsFrame;
     }
 
 
     private static void getSalesStatistics() {
         try {
-            final String url = "http://localhost:8080/phone-trader/sales/getAll";
+            final String url = "http://localhost:8080/phone-trader/Sale/getAll";
             String responseBody = read(url);
 
             if (responseBody.startsWith("[")) {
                 JSONArray sales = new JSONArray(responseBody);
-                Gson g = new GsonBuilder().create();
+
                 for (int i = 0; i < sales.length(); i++) {
                     JSONObject saleJSONObject = sales.getJSONObject(i);
-                    Sale sale = g.fromJson(saleJSONObject.toString(), Sale.class);
+                    Sale sale = gson.fromJson(saleJSONObject.toString(), Sale.class);
 
                     salesModel.addRow(new Object[]{
                             sale.getSalesID(),
@@ -105,15 +108,15 @@ public class PhoneStatisticsView {
 
     private static void getPurchasesStatistics() {
         try {
-            final String url = "http://localhost:8080/phone-trader/purchases/getAll";
+            final String url = "http://localhost:8080/phone-trader/purchase/getall";
             String responseBody = read(url);
 
             if (responseBody.startsWith("[")) {
                 JSONArray purchases = new JSONArray(responseBody);
-                Gson g = new GsonBuilder().create();
+
                 for (int i = 0; i < purchases.length(); i++) {
                     JSONObject purchaseJSONObject = purchases.getJSONObject(i);
-                    Purchase purchase = g.fromJson(purchaseJSONObject.toString(), Purchase.class);
+                    Purchase purchase = gson.fromJson(purchaseJSONObject.toString(), Purchase.class);
 
                     purchasesModel.addRow(new Object[]{
                             purchase.getPurchaseID(),

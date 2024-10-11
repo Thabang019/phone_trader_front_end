@@ -5,7 +5,6 @@ import java.util.Objects;
 
 public class Returns {
     private long returnID;
-
     private Sale sale;
     private String reasonForReturn;
     private LocalDate returnDate;

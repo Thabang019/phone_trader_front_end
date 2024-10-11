@@ -1,6 +1,7 @@
 package za.ac.cput.views;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -8,6 +9,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import za.ac.cput.domain.Returns;
 import za.ac.cput.dto.TokenStorage;
+import za.ac.cput.util.LocalDateTimeTypeAdapter;
+import za.ac.cput.util.LocalDateTypeAdapter;
+import za.ac.cput.util.LocalTimeTypeAdapter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -15,18 +19,22 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class ReturnInventory {
-    private JFrame displayInventory;
     private JPanel mainPanel;
     private static DefaultTableModel tableModel;
     private static final OkHttpClient client = new OkHttpClient();
 
-    public JFrame ReturnInventory() {
-        displayInventory = new JFrame("Returns Inventory");
-        displayInventory.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        displayInventory.setVisible(true);
-        displayInventory.setLayout(new BorderLayout());
+    private final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+            .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter())
+            .create();
+    public ReturnInventory() {
+
 
         mainPanel = new JPanel(new BorderLayout());
 
@@ -62,28 +70,20 @@ public class ReturnInventory {
         addReturnButton.setForeground(Color.WHITE);
         addReturnButton.setFont(new Font("Arial", Font.BOLD, 14));
 
-
-        buttonPanel.add(backButton);
         buttonPanel.add(addReturnButton);
 
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-
-        displayInventory.add(mainPanel);
-        displayInventory.setVisible(true);
 
         loadAllReturns();
 
         backButton.addActionListener(e -> {
             openManagerDashboard();
-            displayInventory.dispose();
         });
 
         addReturnButton.addActionListener(e -> {
             openAddReturn();
-            displayInventory.dispose();
         });
 
-        return displayInventory;
     }
 
     private void openManagerDashboard() {
@@ -93,27 +93,28 @@ public class ReturnInventory {
 
     private void openAddReturn() {
         AddReturnForm addReturnForm = new AddReturnForm();
-        addReturnForm.showAddReturn();
+        addReturnForm.addForm();
     }
 
     private void loadAllReturns() {
         tableModel.setRowCount(0);
 
         try {
-            final String url = "http://localhost:8080/phone-trader/returns/getall";
+            final String url = "http://localhost:8080/phone-trader/Return/getAll";
             String responseBody = sendRequest(url);
 
             if (responseBody.startsWith("[")) {
                 JSONArray returns = new JSONArray(responseBody);
-                Gson gson = new Gson();
+
                 for (int i = 0; i < returns.length(); i++) {
                     JSONObject returnObject = returns.getJSONObject(i);
                     Returns returnItem = gson.fromJson(returnObject.toString(), Returns.class);
 
+                    Long saleID = returnItem.getSales().getSalesID();
                     tableModel.addRow(new Object[]{
                             returnItem.getReturnID(),
                             returnItem.getReasonForReturn(),
-                            returnItem.getSales().getSalesID(),
+                            saleID,
                             returnItem.getReturnDate()
                     });
                 }

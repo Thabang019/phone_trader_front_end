@@ -12,23 +12,16 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class UpdatePhone {
-    private JFrame frame;
+    private JPanel panel;
     private JTextField imeiField, brandField, modelField, colorField, priceField, statusField;
     private JComboBox<String> conditionField;
     private static final OkHttpClient client = new OkHttpClient();
 
-    public JFrame updateCondition(String imei) {
-        frame = new JFrame("Update Phone Condition");
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new GridBagLayout());
-        frame.setLocationRelativeTo(null); // Center the frame
+    public JPanel updateCondition(String imei) {
 
-
-        JPanel panel = new JPanel();
+        panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         panel.setBackground(new Color(240, 240, 240));
-        frame.add(panel);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -117,12 +110,10 @@ public class UpdatePhone {
             @Override
             public void actionPerformed(ActionEvent e) {
                 openPhoneInventory();
-                frame.dispose();
             }
         });
 
-        frame.setVisible(true);
-        return frame;
+        return panel;
     }
 
     private void loadPhoneDetails(String imei) {
@@ -167,9 +158,9 @@ public class UpdatePhone {
 
             try (Response response = client.newCall(request).execute()) {
                 if (response.isSuccessful()) {
-                    JOptionPane.showMessageDialog(frame, "Phone details updated successfully.");
+                    JOptionPane.showMessageDialog(panel, "Phone details updated successfully.");
                 } else {
-                    JOptionPane.showMessageDialog(frame, "Failed to update phone details: " + response.message());
+                    JOptionPane.showMessageDialog(panel, "Failed to update phone details: " + response.message());
                 }
             }
         } catch (IOException e) {
@@ -179,7 +170,7 @@ public class UpdatePhone {
 
     private void openPhoneInventory() {
         PhoneInventory inventory = new PhoneInventory();
-        inventory.PhoneInventory();
+        inventory.getPhoneInventory();
     }
 
     private String sendRequest(String url) throws IOException {

@@ -23,9 +23,6 @@ public class AddReturnForm {
     private static final OkHttpClient client = new OkHttpClient();
 
     public void showAddReturn() {
-        addReturnFrame = new JFrame("Add New Return");
-        addReturnFrame.setSize(400, 300);
-        addReturnFrame.setLayout(new BorderLayout());
 
         panel = new JPanel(new GridLayout(3, 2));
 
@@ -122,5 +119,8 @@ public class AddReturnForm {
                 JOptionPane.showMessageDialog(addReturnFrame, "Failed to add return", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+    public JPanel addForm(){
+        return panel;
     }
 }

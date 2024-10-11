@@ -135,24 +135,18 @@ public class ManagerDashboard {
         PhoneStatisticsView statisticsView = new PhoneStatisticsView();
         centerPanel.removeAll();
         centerPanel.add(statisticsView.getStatistics());
-        centerPanel.revalidate();
-        centerPanel.repaint();
     }
 
     private void displayInventory() {
         PhoneInventory phoneInventory = new PhoneInventory();
         centerPanel.removeAll();
         centerPanel.add(phoneInventory.getPhoneInventory());
-        centerPanel.revalidate();
-        centerPanel.repaint();
     }
 
     private void displayReturns() {
         ReturnInventory returnInventory = new ReturnInventory();
         centerPanel.removeAll();
         centerPanel.add(returnInventory.getReturn());
-        centerPanel.revalidate();
-        centerPanel.repaint();
     }
 
     private void displayProfile() {
