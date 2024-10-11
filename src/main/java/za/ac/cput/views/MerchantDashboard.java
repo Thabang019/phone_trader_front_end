@@ -29,14 +29,8 @@ public class MerchantDashboard {
     private JPanel dashboardPanel;
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private final OkHttpClient client = new OkHttpClient();
-
-    private JTextField imeiField, modelField, priceField,
-    screenSizeField,cameraField;
-    private JComboBox brandDropdown, colorDropdown, conditionDropdown,
-     storageDropdown, ramDropdown, osDropdown, simDropdown,
-     microsdDropdown, fingerprintDropdown, waterResistanceDropdown, wirelessChargingDropdown;
-
-
+    private JTextField imeiField, modelField, priceField, screenSizeField,cameraField, idField, firstNameField, middleNameField, lastNameField, emailField, phoneNumberField, altPhoneField, streetNumberField, streetNameField, suburbField, cityField, postalCodeField;
+    private JComboBox brandDropdown, colorDropdown, conditionDropdown, storageDropdown, ramDropdown, osDropdown, simDropdown, microsdDropdown, fingerprintDropdown, waterResistanceDropdown, wirelessChargingDropdown;
     private final Gson gson = new GsonBuilder()
             .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
@@ -113,16 +107,15 @@ public class MerchantDashboard {
                             Phone phone = PhoneFactory.createPhone(imeiField.getText(), brandDropdown.getSelectedItem().toString(), modelField.getText(), colorDropdown.getSelectedItem().toString(), price, "available", spec, Phone.Condition.NEW);
                             System.out.println(phone);
 
-
-                            Address address = AddressFactory.buildAddress("123","New Market","Woodstock","Cape Town","7750");
-                            Contact contact = ContactFactory.createContact("0789456123","email@gmail.com",address);
+                            Address address = AddressFactory.buildAddress( streetNumberField.getText(), streetNameField.getText(), suburbField.getText(), cityField.getText(), postalCodeField.getText());
+                            Contact contact = ContactFactory.createContact(emailField.getText(), phoneNumberField.getText(), altPhoneField.getText(),address);
 
                             Purchase purchase = PurchaseFactory.createPurchase(LocalDate.now(), LocalTime.now(), EmployeeStorage.getInstance().getEmployee(), 1200, "cash", phone);
                             ArrayList<Purchase> purchaseList = new ArrayList<>();
                             purchaseList.add(purchase);
                             System.out.println(purchase);
 
-                            Seller seller = SellerFactory.createSeller("3241","Okuhle", "Kwanele", "Gebashe",contact, purchaseList);
+                            Seller seller = SellerFactory.createSeller(idField.getText(), firstNameField.getText(), middleNameField.getText(), lastNameField.getText(),contact, purchaseList);
                             System.out.println(seller);
 
                             String response = createSeller("http://localhost:8080/phone-trader/seller/save", seller );
@@ -184,15 +177,13 @@ public class MerchantDashboard {
          fingerprintDropdown = new JComboBox<>(new String[]{"Yes", "No"});
          waterResistanceDropdown = new JComboBox<>(new String[]{"Yes", "No"});
          wirelessChargingDropdown = new JComboBox<>(new String[]{"Yes", "No"});
-        JTextField accessoriesNameField = new JTextField();
-        JTextField accessoriesDescriptionField = new JTextField();
 
 
         JComponent[] fields = {
                 imeiField, brandDropdown, modelField, colorDropdown, priceField, conditionDropdown,
                 screenSizeField, storageDropdown, ramDropdown, osDropdown, cameraField, simDropdown,
                 microsdDropdown, fingerprintDropdown, waterResistanceDropdown, wirelessChargingDropdown,
-                accessoriesNameField, accessoriesDescriptionField
+
         };
 
         for (int i = 0; i < labels.length; i++) {
@@ -207,18 +198,18 @@ public class MerchantDashboard {
                 "Alternative Number:", "Street Number:", "Street Name:", "Suburb:", "City:", "Postal Code:"
         };
 
-        JTextField idField = new JTextField();
-        JTextField firstNameField = new JTextField();
-        JTextField middleNameField = new JTextField();
-        JTextField lastNameField = new JTextField();
-        JTextField emailField = new JTextField();
-        JTextField phoneNumberField = new JTextField();
-        JTextField altPhoneField = new JTextField();
-        JTextField streetNumberField = new JTextField();
-        JTextField streetNameField = new JTextField();
-        JTextField suburbField = new JTextField();
-        JTextField cityField = new JTextField();
-        JTextField postalCodeField = new JTextField();
+         idField = new JTextField();
+         firstNameField = new JTextField();
+         middleNameField = new JTextField();
+         lastNameField = new JTextField();
+         emailField = new JTextField();
+         phoneNumberField = new JTextField();
+         altPhoneField = new JTextField();
+         streetNumberField = new JTextField();
+         streetNameField = new JTextField();
+         suburbField = new JTextField();
+         cityField = new JTextField();
+         postalCodeField = new JTextField();
 
         JComponent[] fields = {idField, firstNameField, middleNameField, lastNameField, emailField, phoneNumberField,
                 altPhoneField, streetNumberField, streetNameField, suburbField, cityField, postalCodeField};
