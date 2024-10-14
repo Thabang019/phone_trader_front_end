@@ -46,7 +46,7 @@ public class Registration {
         JTextField firstNameField = new JTextField();
         personalPanel.add(firstNameField);
 
-        personalPanel.add(new JLabel("Middlename:"));
+        personalPanel.add(new JLabel("Middle Name:"));
         JTextField middleNameField = new JTextField();
         personalPanel.add(middleNameField);
 

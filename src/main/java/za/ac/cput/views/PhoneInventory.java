@@ -67,7 +67,6 @@ public class PhoneInventory {
         buttonPanel.add(addButton);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-
         loadAllPhones();
         searchButton.addActionListener(e -> searchByImei());
 
