@@ -66,7 +66,6 @@ public class DisplayEmployee {
         addButton.setBackground(new Color(192, 0, 0));
         addButton.setForeground(Color.WHITE);
         addButton.setFont(new Font("Arial", Font.BOLD, 14));
-        addButtonPanel.add(backButton);
         addButtonPanel.add(addButton);
 
 

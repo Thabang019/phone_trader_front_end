@@ -24,6 +24,7 @@ public class PhoneInventory {
     private static final OkHttpClient client = new OkHttpClient();
 
     public PhoneInventory() {
+
         mainPanel = new JPanel(new BorderLayout());
 
         JPanel topPanel = new JPanel(new BorderLayout());
@@ -63,7 +64,7 @@ public class PhoneInventory {
         addButton.setBackground(new Color(192, 0, 0));
         addButton.setForeground(Color.WHITE);
         addButton.setFont(new Font("Arial", Font.BOLD, 14));
-        buttonPanel.add(backButton);
+
         buttonPanel.add(addButton);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -189,8 +190,8 @@ public class PhoneInventory {
             return response.body().string();
         }
     }
-
     public JPanel getPhoneInventory(){
         return mainPanel;
     }
 }
+

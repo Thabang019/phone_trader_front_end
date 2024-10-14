@@ -135,8 +135,9 @@ public class ManagerDashboard {
     }
 
     private void displayPurchasesAndSales() {
-        JLabel label = new JLabel("PURCHASES & SALES section is under construction");
-        centerPanel.add(label, BorderLayout.CENTER);
+        PhoneStatisticsView statisticsView = new PhoneStatisticsView();
+        centerPanel.removeAll();
+        centerPanel.add(statisticsView.getStatistics());
     }
 
     private void displayInventory() {
@@ -146,8 +147,9 @@ public class ManagerDashboard {
     }
 
     private void displayReturns() {
-        JLabel label = new JLabel("RETURNS section is under construction");
-        centerPanel.add(label, BorderLayout.CENTER);
+        ReturnInventory returnInventory = new ReturnInventory();
+        centerPanel.removeAll();
+        centerPanel.add(returnInventory.getReturn());
     }
 
     private void displayEmployees() {
