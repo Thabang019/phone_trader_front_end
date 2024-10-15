@@ -8,6 +8,8 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import za.ac.cput.domain.Buyer;
+import za.ac.cput.domain.Purchase;
+import za.ac.cput.domain.Sale;
 import za.ac.cput.domain.Seller;
 import za.ac.cput.dto.TokenStorage;
 import za.ac.cput.util.LocalDateTimeTypeAdapter;
@@ -25,7 +27,7 @@ import java.time.LocalTime;
 public class CustomerPage {
 
     private JLabel customersLabel, buyersLabel, sellersLabel;
-    private JPanel mainPanel;
+    private JPanel mainPanel, buyersLabelPanel, sellersLabelPanel,customersLabelPanel;
     private DefaultTableModel buyersTableModel, sellersTableModel;
     private JTable buyersTable, sellersTable;
     private JScrollPane buyerScrollPane, sellerScrollPane;
@@ -34,14 +36,18 @@ public class CustomerPage {
     public CustomerPage() {
 
         mainPanel = new JPanel();
-        customersLabel = new JLabel("Customers");
 
+        customersLabel = new JLabel("Customers");
+        customersLabelPanel = new JPanel();
+
+        buyersLabelPanel = new JPanel(new BorderLayout());
         buyersLabel = new JLabel("Buyers:", JLabel.LEFT);
         String[] buyerColumns = {"ID Number", "First Name", "Middle Name", "Last Name", "Email", "Sale ID"};
         buyersTableModel = new DefaultTableModel(buyerColumns, 0);
         buyersTable = new JTable(buyersTableModel);
         buyerScrollPane = new JScrollPane(buyersTable);
 
+        sellersLabelPanel = new JPanel(new BorderLayout());
         sellersLabel = new JLabel("Sellers:", JLabel.LEFT);
         String[] sellerColumns = {"ID Number", "First Name", "Middle Name", "Last Name", "Email", "Purchase ID"};
         sellersTableModel = new DefaultTableModel(sellerColumns, 0);
@@ -50,30 +56,38 @@ public class CustomerPage {
 
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        customersLabel.setFont(new Font("Arial", Font.BOLD, 36));
+        customersLabelPanel.setSize(mainPanel.getX(),28);
+        customersLabel.setFont(new Font("Arial", Font.BOLD, 24));
         customersLabel.setOpaque(true);
-        customersLabel.setForeground(new Color(0, 102, 204));
+        customersLabel.setForeground(new Color(192,0,0));
         customersLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        customersLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        customersLabel.setPreferredSize(new Dimension(100, 50));
-        mainPanel.add(customersLabel);
+        customersLabelPanel.add(customersLabel);
+        mainPanel.add(customersLabelPanel);
 
-        buyersLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        buyersLabelPanel.setSize(mainPanel.getX(),24);
+        buyersLabel.setFont(new Font("Arial", Font.BOLD, 20));
         buyersLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        mainPanel.add(buyersLabel);
+        buyersLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        buyersLabelPanel.add(buyersLabel);
+        mainPanel.add(buyersLabelPanel);
 
-        buyersTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
-        buyersTable.getTableHeader().setBackground(Color.BLUE);
+        buyersTable.setRowHeight(24);
+        buyersTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+        buyersTable.getTableHeader().setBackground(new Color(192, 0, 0));
         buyersTable.getTableHeader().setForeground(Color.WHITE);
 
         mainPanel.add(buyerScrollPane);
 
-        sellersLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        sellersLabelPanel.setSize(mainPanel.getX(),24);
+        sellersLabel.setFont(new Font("Arial", Font.BOLD, 20));
         sellersLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        mainPanel.add(sellersLabel);
+        sellersLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        sellersLabelPanel.add(sellersLabel);
+        mainPanel.add(sellersLabelPanel);
 
-        sellersTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
-        sellersTable.getTableHeader().setBackground(Color.BLUE);
+        sellersTable.setRowHeight(24);
+        sellersTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+        sellersTable.getTableHeader().setBackground(new Color(192, 0, 0));
         sellersTable.getTableHeader().setForeground(Color.WHITE);
 
         mainPanel.add(sellerScrollPane);
@@ -89,8 +103,7 @@ public class CustomerPage {
             .create();
 
     private void loadSellers() {
-
-        sellersTableModel.setRowCount(0);
+        sellersTableModel.setRowCount(0); // Clear the table
 
         try {
             final String url = "http://localhost:8080/phone-trader/seller/getAll";
@@ -102,18 +115,27 @@ public class CustomerPage {
                     JSONObject sellerObject = sellers.getJSONObject(i);
                     Seller seller = gson.fromJson(sellerObject.toString(), Seller.class);
 
-                    //"ID Number", "First Name", "Middle Name", "Last Name", "Email", "Purchase ID"
-                    String email = seller.getContact() != null ? seller.getContact().toString() : "null";
-                    String purchase = seller.getPurchases() != null ? seller.getPurchases().toString() : "null";
-
-                    sellersTableModel.addRow(new Object[]{
-                            seller.getIdentityNumber(),
-                            seller.getFirstName(),
-                            seller.getMiddleName(),
-                            seller.getLastName(),
-                            email,
-                            purchase
-                    });
+                    if (seller.getPurchases() != null && !seller.getPurchases().isEmpty()) {
+                        for (Purchase purchaseId : seller.getPurchases()) {
+                            sellersTableModel.addRow(new Object[]{
+                                    seller.getIdentityNumber(),
+                                    seller.getFirstName(),
+                                    seller.getMiddleName(),
+                                    seller.getLastName(),
+                                    seller.getContact().getEmail(),
+                                    purchaseId.getPurchaseID().toString()
+                            });
+                        }
+                    } else {
+                        sellersTableModel.addRow(new Object[]{
+                                seller.getIdentityNumber(),
+                                seller.getFirstName(),
+                                seller.getMiddleName(),
+                                seller.getLastName(),
+                                seller.getContact().getEmail(),
+                                "null"
+                        });
+                    }
                 }
             } else {
                 System.err.println("Expected a JSON array but got: " + responseBody);
@@ -123,8 +145,8 @@ public class CustomerPage {
         }
     }
 
-    private void loadBuyers() {
 
+    private void loadBuyers() {
         buyersTableModel.setRowCount(0);
 
         try {
@@ -137,18 +159,27 @@ public class CustomerPage {
                     JSONObject buyerObject = buyers.getJSONObject(i);
                     Buyer buyer = gson.fromJson(buyerObject.toString(), Buyer.class);
 
-                    //"ID Number", "First Name", "Middle Name", "Last Name", "Email", "Sale ID"
-                    String email = buyer.getContact() != null ? buyer.getContact().toString() : "null";
-                    String sale = buyer.getSales() != null ? buyer.getSales().toString() : "null";
-
-                    buyersTableModel.addRow(new Object[]{
-                            buyer.getIdentityNumber(),
-                            buyer.getFirstName(),
-                            buyer.getMiddleName(),
-                            buyer.getLastName(),
-                            email,
-                            sale
-                    });
+                    if (buyer.getSales() != null && !buyer.getSales().isEmpty()) {
+                        for (Sale saleId : buyer.getSales()) {
+                            buyersTableModel.addRow(new Object[]{
+                                    buyer.getIdentityNumber(),
+                                    buyer.getFirstName(),
+                                    buyer.getMiddleName(),
+                                    buyer.getLastName(),
+                                    buyer.getContact().getEmail(),
+                                    saleId.getSalesID().toString()
+                            });
+                        }
+                    } else {
+                        buyersTableModel.addRow(new Object[]{
+                                buyer.getIdentityNumber(),
+                                buyer.getFirstName(),
+                                buyer.getMiddleName(),
+                                buyer.getLastName(),
+                                buyer.getContact().getEmail(),
+                                "null"
+                        });
+                    }
                 }
             } else {
                 System.err.println("Expected a JSON array but got: " + responseBody);
@@ -157,6 +188,7 @@ public class CustomerPage {
             throw new RuntimeException("Failed to fetch buyers", e);
         }
     }
+
 
     private String sendRequest(String url) throws IOException {
         String token = TokenStorage.getInstance().getToken();
