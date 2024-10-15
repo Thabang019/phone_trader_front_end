@@ -35,35 +35,6 @@ public class ManagerDashboard {
         JLabel logoLabel = new JLabel(resizedLogoIcon);
         logoPanel.add(logoLabel);
 
-        JPanel logOutPanel = new JPanel(new FlowLayout((FlowLayout.RIGHT)));
-        logOutPanel.setBackground(new Color(247, 247, 247));
-        JButton logOutButton = new JButton("Log Out");
-        logOutPanel.add(logOutButton);
-
-        navBar.add(logoPanel, BorderLayout.WEST);
-        navBar.add(logOutPanel, BorderLayout.EAST);
-
-        logOutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int confirm = JOptionPane.showConfirmDialog(managerDashboard, "Are you sure you want to log out?", "Log Out", JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) {
-                    jFrame.dispose();
-                    Welcome welcome = new Welcome();
-                    welcome.Welcome();
-                }
-            }
-        });
-
-        managerDashboard.add(navBar, BorderLayout.NORTH);
-        jFrame.add(managerDashboard);
-        jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        jFrame.setVisible(true);
-
-        JPanel sidebar = new JPanel();
-        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
-        sidebar.setBackground(new Color(247, 247, 247));
-
         JButton profileButton = new JButton(EmployeeStorage.getInstance().getEmployee().getFirstName());
         profileButton.setFont(new Font("Arial", Font.PLAIN, 12));
         ImageIcon originalIcon = new ImageIcon("pic/profile.png");
@@ -77,7 +48,6 @@ public class ManagerDashboard {
         profileButton.setBorderPainted(false);
         profileButton.setContentAreaFilled(false);
         profileButton.setFocusPainted(false);
-        sidebar.add(profileButton);
 
         profileButton.addActionListener(new ActionListener() {
             @Override
@@ -87,30 +57,63 @@ public class ManagerDashboard {
             }
         });
 
-        String[] buttonNames = {"EMPLOYEES", "CUSTOMERS", "PURCHASES & SALES", "INVENTORY", "RETURNS"};
-        for (String buttonName : buttonNames) {
-            JButton button = new JButton(buttonName);
+        navBar.add(logoPanel, BorderLayout.WEST);
+        navBar.add(profileButton, BorderLayout.EAST);
+
+        managerDashboard.add(navBar, BorderLayout.NORTH);
+        jFrame.add(managerDashboard);
+        jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        jFrame.setVisible(true);
+
+        JPanel sidebar = new JPanel(new GridBagLayout());
+        sidebar.setBackground(new Color(247, 247, 247));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 0, 10, 0);
+        gbc.gridx = 0;
+
+        String[] buttonNames = {"PHONES", "CUSTOMERS", "EMPLOYEES", "PURCHASES & SALES", "RETURNS", "LOG OUT"};
+        int buttonCount = buttonNames.length;
+
+        for (int i = 0; i < buttonCount; i++) {
+            JButton button = new JButton(buttonNames[i]);
             button.setPreferredSize(new Dimension(170, 50));
             button.setFont(new Font("Arial", Font.BOLD, 13));
             button.setBorder(BorderFactory.createEmptyBorder());
 
-            sidebar.add(button);
-            sidebar.add(Box.createRigidArea(new Dimension(0, 15)));
+            if (i == buttonCount - 1) {
+                gbc.weighty = 1;
+                gbc.anchor = GridBagConstraints.SOUTH;
+            } else {
+                gbc.weighty = 0;
+                gbc.anchor = GridBagConstraints.NORTH;
+            }
+
+            gbc.gridy = i;
+            sidebar.add(button, gbc);
 
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     centerPanel.removeAll();
-                    if (buttonName.equals("EMPLOYEES")) {
-                        displayEmployees();
-                    } else if (buttonName.equals("CUSTOMERS")) {
-                        displayCustomers();
-                    } else if (buttonName.equals("PURCHASES & SALES")) {
-                        displayPurchasesAndSales();
-                    } else if (buttonName.equals("INVENTORY")) {
+                    if (button.getText().equals("PHONES")) {
                         displayInventory();
-                    } else if (buttonName.equals("RETURNS")) {
+                    } else if (button.getText().equals("CUSTOMERS")) {
+                        displayCustomers();
+                    } else if (button.getText().equals("EMPLOYEES")) {
+                        displayEmployees();
+                    } else if (button.getText().equals("PURCHASES & SALES")) {
+                        displayPurchasesAndSales();
+                    }  else if (button.getText().equals("RETURNS")) {
                         displayReturns();
+                    } else if (button.getText().equals("LOG OUT")) {
+                        int confirm = JOptionPane.showConfirmDialog(managerDashboard, "Are you sure you want to log out?", "Log Out", JOptionPane.YES_NO_OPTION);
+                        if (confirm == JOptionPane.YES_OPTION) {
+                            jFrame.dispose();
+                            Welcome welcome = new Welcome();
+                            welcome.Welcome();
+                        }
                     }
                     centerPanel.revalidate();
                     centerPanel.repaint();
@@ -149,19 +152,18 @@ public class ManagerDashboard {
         centerPanel.add(returnInventory.getReturn());
     }
 
+    private void displayEmployees() {
+        DisplayEmployee displayEmployee = new DisplayEmployee();
+        centerPanel.removeAll();
+        centerPanel.add(displayEmployee.getDisplayEmployee());
+    }
+
     private void displayProfile() {
         JFrame frame = new JFrame("Employee Profile");
         frame.add(new EmployeeProfile());
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
         jFrame.dispose();
-
-    }
-
-    private void displayEmployees() {
-        DisplayEmployee displayEmployee = new DisplayEmployee();
-        centerPanel.removeAll();
-        centerPanel.add(displayEmployee.getDisplayEmployee());
     }
     private void displayCustomers() {
         CustomerPage customers = new CustomerPage();

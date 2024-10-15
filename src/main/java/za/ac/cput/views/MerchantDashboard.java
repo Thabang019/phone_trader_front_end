@@ -178,7 +178,6 @@ public class MerchantDashboard {
          waterResistanceDropdown = new JComboBox<>(new String[]{"Yes", "No"});
          wirelessChargingDropdown = new JComboBox<>(new String[]{"Yes", "No"});
 
-
         JComponent[] fields = {
                 imeiField, brandDropdown, modelField, colorDropdown, priceField, conditionDropdown,
                 screenSizeField, storageDropdown, ramDropdown, osDropdown, cameraField, simDropdown,
@@ -219,13 +218,12 @@ public class MerchantDashboard {
             customerDetailsPanel.add(fields[i]);
         }
     }
-
     public boolean validateForm() {
        boolean isValid = true;
 
        Component[] components = ((Container) dashboardPanel.getComponent(0)).getComponents();
-      // isValid = isValid((JPanel) components[0], true);
-      // isValid = isValid((JPanel) components[1], isValid);
+       isValid = isValid((JPanel) components[0], true);
+       isValid = isValid((JPanel) components[1], isValid);
 
        if (!isValid) {
            JOptionPane.showMessageDialog(frame, "Please fill in all required fields.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -245,6 +243,7 @@ public class MerchantDashboard {
                 }
             }
         }
+
         return isValid;
     }
 
