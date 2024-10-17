@@ -33,24 +33,32 @@ public class PhoneStatisticsView {
 
     public PhoneStatisticsView() {
         mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(new Color(247, 247, 247));
 
         JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(new Color(247, 247, 247));
         JLabel title = new JLabel("PHONE SALES & PURCHASES STATISTICS", JLabel.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 20));
         title.setForeground(new Color(192, 0, 0));
         topPanel.add(title, BorderLayout.CENTER);
 
         JPanel centerPanel = new JPanel();
+        centerPanel.setBackground(new Color(247, 247, 247));
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
 
         JPanel salesTablePanel = new JPanel(new BorderLayout());
+        salesTablePanel.setBackground(new Color(247, 247, 247));
         JLabel salesLabel = new JLabel("Phone Sales Statistics");
         salesLabel.setFont(new Font("Arial", Font.BOLD, 16));
         String[] salesColumns = {"Sale_ID", "Phone Model", "Sale Price", "Date"};
         salesModel = new DefaultTableModel(salesColumns, 0);
         JTable salesTable = new JTable(salesModel);
+        salesTable.setRowHeight(24);
+        salesTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+        salesTable.getTableHeader().setBackground(new Color(192, 0, 0));
+        salesTable.getTableHeader().setForeground(Color.WHITE);
         JScrollPane salesScrollPane = new JScrollPane(salesTable);
         salesTablePanel.add(salesLabel, BorderLayout.NORTH);
         salesTablePanel.add(salesScrollPane, BorderLayout.CENTER);
@@ -58,11 +66,16 @@ public class PhoneStatisticsView {
 
 
         JPanel purchasesTablePanel = new JPanel(new BorderLayout());
+        purchasesTablePanel.setBackground(new Color(247, 247, 247));
         JLabel purchasesLabel = new JLabel("Phone Purchase Statistics");
         purchasesLabel.setFont(new Font("Arial", Font.BOLD, 16));
         String[] purchasesColumns = {"Purchase_ID", "Phone Model", "Purchase Price", "Date"};
         purchasesModel = new DefaultTableModel(purchasesColumns, 0);
         JTable purchasesTable = new JTable(purchasesModel);
+        purchasesTable.setRowHeight(24);
+        purchasesTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+        purchasesTable.getTableHeader().setBackground(new Color(192, 0, 0));
+        purchasesTable.getTableHeader().setForeground(Color.WHITE);
         JScrollPane purchasesScrollPane = new JScrollPane(purchasesTable);
         purchasesTablePanel.add(purchasesLabel, BorderLayout.NORTH);
         purchasesTablePanel.add(purchasesScrollPane, BorderLayout.CENTER);

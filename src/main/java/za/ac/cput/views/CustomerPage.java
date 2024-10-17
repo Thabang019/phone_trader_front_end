@@ -26,11 +26,11 @@ import java.time.LocalTime;
 
 public class CustomerPage {
 
-    private JLabel customersLabel, buyersLabel, sellersLabel;
-    private JPanel mainPanel, buyersLabelPanel, sellersLabelPanel,customersLabelPanel;
-    private DefaultTableModel buyersTableModel, sellersTableModel;
-    private JTable buyersTable, sellersTable;
-    private JScrollPane buyerScrollPane, sellerScrollPane;
+    private JLabel customersLabel;
+    private JPanel mainPanel,customersLabelPanel;
+    private DefaultTableModel buyersTableModel;
+    private JTable buyersTable;
+    private JScrollPane buyerScrollPane;
     private static final OkHttpClient client = new OkHttpClient();
 
     public CustomerPage() {
@@ -40,23 +40,14 @@ public class CustomerPage {
         customersLabel = new JLabel("Customers");
         customersLabelPanel = new JPanel();
 
-        buyersLabelPanel = new JPanel(new BorderLayout());
-        buyersLabel = new JLabel("Buyers:", JLabel.LEFT);
-        String[] buyerColumns = {"ID Number", "First Name", "Middle Name", "Last Name", "Email", "Sale ID"};
+        String[] buyerColumns = {"ID Number", "First Name", "Middle Name", "Last Name", "Email", "InvoiceID"};
         buyersTableModel = new DefaultTableModel(buyerColumns, 0);
         buyersTable = new JTable(buyersTableModel);
         buyerScrollPane = new JScrollPane(buyersTable);
 
-        sellersLabelPanel = new JPanel(new BorderLayout());
-        sellersLabel = new JLabel("Sellers:", JLabel.LEFT);
-        String[] sellerColumns = {"ID Number", "First Name", "Middle Name", "Last Name", "Email", "Purchase ID"};
-        sellersTableModel = new DefaultTableModel(sellerColumns, 0);
-        sellersTable = new JTable(sellersTableModel);
-        sellerScrollPane = new JScrollPane(sellersTable);
-
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        customersLabelPanel.setSize(mainPanel.getX(),28);
+        customersLabelPanel.setSize(mainPanel.getX(),15);
         customersLabel.setFont(new Font("Arial", Font.BOLD, 24));
         customersLabel.setOpaque(true);
         customersLabel.setForeground(new Color(192,0,0));
@@ -64,33 +55,12 @@ public class CustomerPage {
         customersLabelPanel.add(customersLabel);
         mainPanel.add(customersLabelPanel);
 
-        buyersLabelPanel.setSize(mainPanel.getX(),24);
-        buyersLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        buyersLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        buyersLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        buyersLabelPanel.add(buyersLabel);
-        mainPanel.add(buyersLabelPanel);
-
         buyersTable.setRowHeight(24);
         buyersTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
         buyersTable.getTableHeader().setBackground(new Color(192, 0, 0));
         buyersTable.getTableHeader().setForeground(Color.WHITE);
 
         mainPanel.add(buyerScrollPane);
-
-        sellersLabelPanel.setSize(mainPanel.getX(),24);
-        sellersLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        sellersLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        sellersLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        sellersLabelPanel.add(sellersLabel);
-        mainPanel.add(sellersLabelPanel);
-
-        sellersTable.setRowHeight(24);
-        sellersTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
-        sellersTable.getTableHeader().setBackground(new Color(192, 0, 0));
-        sellersTable.getTableHeader().setForeground(Color.WHITE);
-
-        mainPanel.add(sellerScrollPane);
 
         loadSellers();
         loadBuyers();
@@ -103,7 +73,7 @@ public class CustomerPage {
             .create();
 
     private void loadSellers() {
-        sellersTableModel.setRowCount(0); // Clear the table
+        buyersTableModel.setRowCount(0); // Clear the table
 
         try {
             final String url = "http://localhost:8080/phone-trader/seller/getAll";
@@ -117,7 +87,7 @@ public class CustomerPage {
 
                     if (seller.getPurchases() != null && !seller.getPurchases().isEmpty()) {
                         for (Purchase purchaseId : seller.getPurchases()) {
-                            sellersTableModel.addRow(new Object[]{
+                            buyersTableModel.addRow(new Object[]{
                                     seller.getIdentityNumber(),
                                     seller.getFirstName(),
                                     seller.getMiddleName(),
@@ -127,7 +97,7 @@ public class CustomerPage {
                             });
                         }
                     } else {
-                        sellersTableModel.addRow(new Object[]{
+                        buyersTableModel.addRow(new Object[]{
                                 seller.getIdentityNumber(),
                                 seller.getFirstName(),
                                 seller.getMiddleName(),
@@ -147,7 +117,6 @@ public class CustomerPage {
 
 
     private void loadBuyers() {
-        buyersTableModel.setRowCount(0);
 
         try {
             final String url = "http://localhost:8080/phone-trader/buyer/getAll";

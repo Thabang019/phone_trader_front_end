@@ -1,5 +1,6 @@
 package za.ac.cput.util;
 
+import java.util.Random;
 import java.util.regex.Pattern;
 
 public class Helper {
@@ -51,4 +52,11 @@ public class Helper {
 
     }
 
+    public static int randomNumber(){
+        Random rand = new Random();
+        int min = 10000000;
+        int max = 99999999;
+        int randomNumber = rand.nextInt((max - min) + 1) + min;
+        return randomNumber;
+    }
 }

@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import com.google.gson.Gson;
-import kotlin.coroutines.jvm.internal.Boxing;
 import okhttp3.*;
 import za.ac.cput.domain.Contact;
 import za.ac.cput.domain.Employee;
@@ -14,9 +13,7 @@ import za.ac.cput.dto.TokenStorage;
 import za.ac.cput.factory.AddressFactory;
 import za.ac.cput.factory.ContactFactory;
 import za.ac.cput.factory.EmployeeFactory;
-
-
-import javax.swing.*;
+import za.ac.cput.util.Helper;
 import java.io.IOException;
 
 public class Registration {
@@ -25,6 +22,7 @@ public class Registration {
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private final OkHttpClient client = new OkHttpClient();
     private final Gson gson = new Gson();
+    private int rand_int2;
 
     public JFrame Registration() {
 
@@ -38,8 +36,10 @@ public class Registration {
         JPanel personalPanel = new JPanel(new GridLayout(0, 2, 10, 10));
         personalPanel.setBorder(BorderFactory.createTitledBorder("Personal"));
 
+        rand_int2 = Helper.randomNumber();
+        String empid = String.valueOf(rand_int2);
         personalPanel.add(new JLabel("Employee Identity no*:"));
-        JTextField empIdField = new JTextField();
+        JTextField empIdField = new JTextField(empid);
         personalPanel.add(empIdField);
 
         personalPanel.add(new JLabel("First Name*:"));
