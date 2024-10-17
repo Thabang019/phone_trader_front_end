@@ -24,8 +24,8 @@ public class DisplayEmployee {
         mainPanel = new JPanel(new BorderLayout());
         JPanel topPanel = new JPanel(new BorderLayout());
         JLabel title = new JLabel("EMPLOYEES", JLabel.CENTER);
-        title.setFont(new Font("Arial", Font.BOLD, 20));
-        title.setForeground(new Color(192, 0, 0));
+        title.setFont(new Font("Arial", Font.BOLD, 24));
+        //title.setForeground(new Color(192, 0, 0));
         topPanel.add(title, BorderLayout.CENTER);
 
         JPanel centerPanel = new JPanel();

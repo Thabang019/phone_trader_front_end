@@ -30,7 +30,7 @@ public class PhoneInventory {
         JPanel topPanel = new JPanel(new BorderLayout());
         JLabel titleLabel = new JLabel("Device Inventory", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        topPanel.add(titleLabel, BorderLayout.CENTER);
+        topPanel.add(titleLabel, BorderLayout.NORTH);
 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel label = new JLabel("Find Phone by IMEI:");
@@ -41,8 +41,42 @@ public class PhoneInventory {
         searchPanel.add(label);
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
-        topPanel.add(searchPanel, BorderLayout.SOUTH);
 
+        JPanel centerButton = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton collectionButton = new JButton("Collection");
+        collectionButton.setBackground(new Color(192, 0, 0));
+        collectionButton.setForeground(Color.WHITE);
+        collectionButton.setBorderPainted(false);
+        collectionButton.setFocusPainted(false);
+        collectionButton.setFont(new Font("Arial", Font.BOLD, 15));
+        collectionButton.setPreferredSize(new Dimension(120, 35));
+
+        JButton iphoneButton = new JButton("iPhone");
+        iphoneButton.setBackground(new Color(192, 0, 0));
+        iphoneButton.setForeground(Color.WHITE);
+        iphoneButton.setBorderPainted(false);
+        iphoneButton.setFocusPainted(false);
+        iphoneButton.setFont(new Font("Arial", Font.BOLD, 15));
+        iphoneButton.setPreferredSize(new Dimension(120, 35));
+
+        JButton androidButton = new JButton("Android");
+        androidButton.setBackground(new Color(192, 0, 0));
+        androidButton.setForeground(Color.WHITE);
+        androidButton.setBorderPainted(false);
+        androidButton.setFocusPainted(false);
+        androidButton.setFont(new Font("Arial", Font.BOLD, 15));
+        androidButton.setPreferredSize(new Dimension(120, 35));
+
+        centerButton.add(Box.createRigidArea(new Dimension(0, 30)));
+        centerButton.add(iphoneButton);
+        centerButton.add(Box.createRigidArea(new Dimension(0, 15)));
+        centerButton.add(androidButton);
+        centerButton.add(Box.createRigidArea(new Dimension(0, 15)));
+        centerButton.add(collectionButton);
+        centerButton.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        topPanel.add(searchPanel, BorderLayout.CENTER);
+        topPanel.add(centerButton, BorderLayout.SOUTH);
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
         String[] columnNames = {"IMEI", "Brand", "Model", "Color", "Price", "Status","Condition"};
