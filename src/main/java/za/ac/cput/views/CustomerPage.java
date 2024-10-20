@@ -36,7 +36,7 @@ public class CustomerPage {
     public CustomerPage() {
 
         mainPanel = new JPanel();
-
+        mainPanel.setBackground(new Color(247, 247, 247));
         customersLabel = new JLabel("Customers");
         customersLabelPanel = new JPanel();
 

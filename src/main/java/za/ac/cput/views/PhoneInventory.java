@@ -266,13 +266,15 @@ public class PhoneInventory {
 
                     for (int i = 0; i < phonesArray.length(); i++) {
                         JSONObject phoneJSONObject = phonesArray.getJSONObject(i);
-                        Phone phone = g.fromJson(phoneJSONObject.toString(), Phone.class);
-                        model.addRow(new Object[]{
-                                phone.getImei(),  // Button text
-                                phone.getBrand(),
-                                phone.getModel(),
-                                phone.getPrice()
-                        });
+                        if(phoneJSONObject.toString().contains("unsold")) {
+                            Phone phone = g.fromJson(phoneJSONObject.toString(), Phone.class);
+                            model.addRow(new Object[]{
+                                    phone.getImei(),  // Button text
+                                    phone.getBrand(),
+                                    phone.getModel(),
+                                    phone.getPrice()
+                            });
+                        }
                     }
                 } else {
                     System.err.println("Expected a JSON array but got: " + responseBody);
