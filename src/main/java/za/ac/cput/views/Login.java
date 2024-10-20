@@ -198,8 +198,9 @@ public class Login {
 
     private void openSalesPersonDashboard() {
         SalesPersonDashboard salesPersonDashboard = new SalesPersonDashboard();
-        salesPersonDashboard.setVisible(true);
+        salesPersonDashboard.SalesPersonDashboard();
     }
+
     private void openManagerDashboard() {
         ManagerDashboard managerDashboard = new ManagerDashboard();
         managerDashboard.ManagerDashboard();

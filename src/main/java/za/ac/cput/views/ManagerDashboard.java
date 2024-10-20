@@ -12,12 +12,6 @@ public class ManagerDashboard {
     private JFrame jFrame;
     private JPanel managerDashboard;
     private JPanel centerPanel;
-    private static DefaultTableModel model;
-    private JTextField searchField;
-    private static final OkHttpClient client = new OkHttpClient();
-
-    private static int currentPage = 1;
-    private static int pageSize = 20;
 
     public JFrame ManagerDashboard() {
         jFrame = new JFrame();
@@ -127,6 +121,8 @@ public class ManagerDashboard {
         managerDashboard.add(sidebar, BorderLayout.WEST);
         managerDashboard.add(centerPanel, BorderLayout.CENTER);
 
+        displayInventory();
+
         jFrame.add(managerDashboard);
         jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         jFrame.setVisible(true);
@@ -165,6 +161,7 @@ public class ManagerDashboard {
         frame.setVisible(true);
         jFrame.dispose();
     }
+
     private void displayCustomers() {
         CustomerPage customers = new CustomerPage();
         centerPanel.removeAll();
