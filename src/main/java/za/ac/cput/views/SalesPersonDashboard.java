@@ -158,7 +158,6 @@ public class SalesPersonDashboard {
         centerPanel.removeAll();
         centerPanel.add(customers.getCustomers());
     }
-
 }
 
 
