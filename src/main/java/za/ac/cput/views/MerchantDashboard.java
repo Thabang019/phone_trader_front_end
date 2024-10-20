@@ -24,8 +24,6 @@ import java.util.ArrayList;
 
 
 public class MerchantDashboard {
-
-    private JFrame frame;
     private JPanel dashboardPanel;
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private final OkHttpClient client = new OkHttpClient();
@@ -46,15 +44,10 @@ public class MerchantDashboard {
 
     private void initialize() {
 
-        frame = new JFrame("Merchant Dashboard");
-
         dashboardPanel = new JPanel(new BorderLayout());
-
+        dashboardPanel.setBackground(new Color(247, 247, 247));
         setupMenuBar();
         setupContentPanel();
-
-        frame.add(dashboardPanel);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
     }
 
@@ -72,17 +65,13 @@ public class MerchantDashboard {
         logOutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to log out?", "Log Out", JOptionPane.YES_NO_OPTION);
+                int confirm = JOptionPane.showConfirmDialog(dashboardPanel, "Are you sure you want to log out?", "Log Out", JOptionPane.YES_NO_OPTION);
                 if (confirm == JOptionPane.YES_OPTION) {
-                    frame.dispose();
                    Welcome welcome = new Welcome();
                     welcome.Welcome();
                 }
             }
         });
-
-        frame.setJMenuBar(menuBar);
-
 
             JButton purchaseButton = new JButton("Purchase");
             purchaseButton.setBackground(Color.BLUE);
@@ -123,27 +112,27 @@ public class MerchantDashboard {
 
                             System.out.println(gson);
 
-                            JOptionPane.showMessageDialog(frame, "Purchase successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(dashboardPanel, "Purchase successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(frame, "Purchase Failed: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(dashboardPanel, "Purchase Failed: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                             ex.printStackTrace();
                         }
                     }
                 }
             });
-            frame.setVisible(true);
             dashboardPanel.add(purchaseButton, BorderLayout.SOUTH);
 
     }
 
     private void setupContentPanel() {
         JPanel contentPanel = new JPanel(new GridLayout(1, 2, 20, 0));
-
+        contentPanel.setBackground(new Color(247, 247, 247));
         JPanel phoneDetailsPanel = new JPanel(new GridLayout(0, 2, 10, 10));
         phoneDetailsPanel.setBorder(BorderFactory.createTitledBorder("Phone Details"));
         addPhoneDetails(phoneDetailsPanel);
 
         JPanel customerDetailsPanel = new JPanel(new GridLayout(0, 2, 10, 10));
+        customerDetailsPanel.setBackground(new Color(247, 247, 247));
         customerDetailsPanel.setBorder(BorderFactory.createTitledBorder("Customer Details"));
         addCustomerDetails(customerDetailsPanel);
 
@@ -157,8 +146,7 @@ public class MerchantDashboard {
         String[] labels = {
                 "IMEI Number:", "Brand:", "Model:", "Color:", "Price:", "Condition:", "Screen size:",
                 "Storage:", "RAM:", "Operating System:", "Camera:", "Number of sims:", "MicroSD:",
-                "Fingerprint:", "Water resistance:", "Wireless charging:", "Accessories Name:",
-                "Accessories Description:"
+                "Fingerprint:", "Water resistance:", "Wireless charging:"
         };
 
          imeiField = new JTextField();
@@ -226,7 +214,7 @@ public class MerchantDashboard {
        isValid = isValid((JPanel) components[1], isValid);
 
        if (!isValid) {
-           JOptionPane.showMessageDialog(frame, "Please fill in all required fields.", "Error", JOptionPane.ERROR_MESSAGE);
+           JOptionPane.showMessageDialog(dashboardPanel, "Please fill in all required fields.", "Error", JOptionPane.ERROR_MESSAGE);
        }
 
        return isValid;
@@ -268,7 +256,7 @@ public class MerchantDashboard {
         return token;
     }
 
-    public void showDashboard() {
-        frame.setVisible(true);
+    public JPanel showDashboard() {
+        return dashboardPanel;
     }
 }

@@ -300,5 +300,3 @@ public class SalesPersonSellPage extends JFrame {
 
 
 }
-
-

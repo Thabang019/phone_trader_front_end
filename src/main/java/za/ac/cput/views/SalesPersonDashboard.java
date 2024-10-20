@@ -1,369 +1,163 @@
 package za.ac.cput.views;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import za.ac.cput.domain.Phone;
-import za.ac.cput.domain.Spec;
-import za.ac.cput.dto.TokenStorage;
-import za.ac.cput.util.ImeiStorage;
-
+import za.ac.cput.dto.EmployeeStorage;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
-public class SalesPersonDashboard extends JFrame {
-    private JTextField searchField;
-    private JTable phoneTable;
-    private DefaultTableModel tableModel;
-    private static final OkHttpClient client = new OkHttpClient();
+public class SalesPersonDashboard {
+    private JFrame jFrame;
+    private JPanel salesPersonDashboard;
+    private JPanel centerPanel;
 
-    public SalesPersonDashboard() {
-        // Set up the frame
-        setTitle("Phone Trader");
-        setSize(800, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout(10, 10));
+    public JFrame SalesPersonDashboard() {
+        jFrame = new JFrame();
+        salesPersonDashboard = new JPanel(new BorderLayout());
 
-        // Create the main container
-        JPanel mainContainer = new JPanel(new BorderLayout(20, 20));
-        mainContainer.setBackground(new Color(247, 247, 247));
-        mainContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        JPanel navBar = new JPanel(new BorderLayout());
+        navBar.setBackground(new Color(247, 247, 247));
 
-        // Search bar panel
-        JPanel searchBarPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        searchBarPanel.setBackground(new Color(247, 247, 247));
-        searchField = new JTextField(20);
-        JButton searchButton = new JButton("Search");
-        searchButton.setBackground(new Color(192, 0, 0));
-        searchButton.setForeground(Color.WHITE);
-        searchButton.setBorderPainted(false);
-        searchButton.setFocusPainted(false);
-        searchButton.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
-        searchButton.setFont(new Font("Arial", Font.BOLD, 15));
-        searchButton.setPreferredSize(new Dimension(120, 35));
-        searchBarPanel.add(new JLabel("Find Phone"));
-        searchBarPanel.add(searchField);
-        searchBarPanel.add(searchButton);
+        JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        logoPanel.setBackground(new Color(247, 247, 247));
+        ImageIcon logo = new ImageIcon("pic/logo.png");
+        Image logoImage = logo.getImage();
+        Image resizedLogo = logoImage.getScaledInstance(150, 80, Image.SCALE_SMOOTH);
+        ImageIcon resizedLogoIcon = new ImageIcon(resizedLogo);
+        JLabel logoLabel = new JLabel(resizedLogoIcon);
+        logoPanel.add(logoLabel);
 
+        JButton profileButton = new JButton(EmployeeStorage.getInstance().getEmployee().getFirstName());
+        profileButton.setFont(new Font("Arial", Font.PLAIN, 12));
+        ImageIcon originalIcon = new ImageIcon("pic/profile.png");
+        Image image = originalIcon.getImage();
+        Image resizedImage = image.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+        profileButton.setIcon(resizedIcon);
+        profileButton.setHorizontalAlignment(SwingConstants.LEFT);
+        profileButton.setPreferredSize(new Dimension(130, 40));
+        profileButton.setIconTextGap(5);
+        profileButton.setBorderPainted(false);
+        profileButton.setContentAreaFilled(false);
+        profileButton.setFocusPainted(false);
 
-        // Filter buttons panel
-        JPanel buttonPanel = new JPanel(new BorderLayout());
-        buttonPanel.setBackground(new Color(247, 247, 247));
-        JPanel centerButton = new JPanel();
-        centerButton.setLayout(new BoxLayout(centerButton, BoxLayout.Y_AXIS));
-        JButton iphoneButton = new JButton("iPhone");
-        iphoneButton.setBackground(new Color(192, 0, 0));
-        iphoneButton.setForeground(Color.WHITE);
-        iphoneButton.setBorderPainted(false);
-        iphoneButton.setFocusPainted(false);
-        iphoneButton.setFont(new Font("Arial", Font.BOLD, 15));
-        iphoneButton.setPreferredSize(new Dimension(120, 35));
-
-        JButton androidButton = new JButton("Android");
-        androidButton.setBackground(new Color(192, 0, 0));
-        androidButton.setForeground(Color.WHITE);
-        androidButton.setBorderPainted(false);
-        androidButton.setFocusPainted(false);
-        androidButton.setFont(new Font("Arial", Font.BOLD, 15));
-        androidButton.setPreferredSize(new Dimension(120, 35));
-
-        JButton collectionButton = new JButton("Collection");
-        collectionButton.setBackground(new Color(192, 0, 0));
-        collectionButton.setForeground(Color.WHITE);
-        collectionButton.setBorderPainted(false);
-        collectionButton.setFocusPainted(false);
-        collectionButton.setFont(new Font("Arial", Font.BOLD, 15));
-        collectionButton.setPreferredSize(new Dimension(120, 35));
-
-        centerButton.add(Box.createRigidArea(new Dimension(0, 30)));
-        centerButton.add(iphoneButton);
-        centerButton.add(Box.createRigidArea(new Dimension(0, 15)));
-        centerButton.add(androidButton);
-        centerButton.add(Box.createRigidArea(new Dimension(0, 15)));
-        centerButton.add(collectionButton);
-        centerButton.add(Box.createRigidArea(new Dimension(0, 15)));
-
-        mainContainer.add(searchBarPanel, BorderLayout.NORTH);
-        buttonPanel.add(centerButton, BorderLayout.CENTER);
-        mainContainer.add(buttonPanel, BorderLayout.WEST);
-
-        // Iphone button actionListener
-        iphoneButton.addActionListener(new ActionListener() {
+        profileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                findByBrand("iPhone");
-            }
-            private void findByBrand(String brand) {
-                try {
-                    final String url = "http://localhost:8080/phone-trader/phones/getall"; // Or use an appropriate endpoint
-                    String responseBody = read(url);
-
-                    if (responseBody.startsWith("[")) {
-                        JSONArray phonesArray = new JSONArray(responseBody);
-                        tableModel.setRowCount(0); // Clear existing table content
-                        Gson g = new GsonBuilder().create();
-
-                        for (int i = 0; i < phonesArray.length(); i++) {
-                            JSONObject phoneJSONObject = phonesArray.getJSONObject(i);
-                            Phone phone = g.fromJson(phoneJSONObject.toString(), Phone.class);
-
-                            // Filter by brand (or operating system)
-                            if ("iPhone".equalsIgnoreCase(phone.getBrand()) ||
-                                    "ios".equalsIgnoreCase(phone.getSpecification().getOperatingSystem())) {
-                                tableModel.addRow(new Object[]{
-                                        phone.getImei(),  // Button text
-                                        phone.getBrand(),
-                                        phone.getModel(),
-                                        phone.getPrice()
-                                });
-                            }
-                        }
-                    } else {
-                        System.err.println("Expected a JSON array but got: " + responseBody);
-                    }
-                } catch (Exception ex) {
-                    throw new RuntimeException("Failed to fetch iPhones", ex);
-                }
+                displayProfile();
+                jFrame.dispose();
             }
         });
 
-        // Android button actionListener
-        androidButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                findByOS("Android");
-            }
-            private void findByOS(String os) {
-                try {
-                    final String url = "http://localhost:8080/phone-trader/phones/getall"; // Or use an appropriate endpoint
-                    String responseBody = read(url);
+        navBar.add(logoPanel, BorderLayout.WEST);
+        navBar.add(profileButton, BorderLayout.EAST);
 
-                    if (responseBody.startsWith("[")) {
-                        JSONArray phonesArray = new JSONArray(responseBody);
-                        tableModel.setRowCount(0); // Clear existing table content
-                        Gson g = new GsonBuilder().create();
+        salesPersonDashboard.add(navBar, BorderLayout.NORTH);
+        jFrame.add(salesPersonDashboard);
+        jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        jFrame.setVisible(true);
 
-                        for (int i = 0; i < phonesArray.length(); i++) {
-                            JSONObject phoneJSONObject = phonesArray.getJSONObject(i);
-                            Phone phone = g.fromJson(phoneJSONObject.toString(), Phone.class);
+        JPanel sidebar = new JPanel(new GridBagLayout());
+        sidebar.setBackground(new Color(247, 247, 247));
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 0, 10, 0);
+        gbc.gridx = 0;
 
-                            // Filter by operating system
-                            if ("Android".equalsIgnoreCase(phone.getSpecification().getOperatingSystem())) {
-                                tableModel.addRow(new Object[]{
-                                        phone.getImei(),  // Button text
-                                        phone.getBrand(),
-                                        phone.getModel(),
-                                        phone.getPrice()
-                                });
-                            }
-                        }
-                    } else {
-                        System.err.println("Expected a JSON array but got: " + responseBody);
-                    }
-                } catch (Exception ex) {
-                    throw new RuntimeException("Failed to fetch Android phones", ex);
-                }
-            }
-        });
+        String[] buttonNames = {"BUY PHONE", "PHONES", "CUSTOMERS", "RETURNS", "LOG OUT"};
+        int buttonCount = buttonNames.length;
 
-        // Search Button Action
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String searchQuery = searchField.getText().trim();
+        for (int i = 0; i < buttonCount; i++) {
+            JButton button = new JButton(buttonNames[i]);
+            button.setPreferredSize(new Dimension(170, 50));
+            button.setFont(new Font("Arial", Font.BOLD, 13));
+            button.setBorder(BorderFactory.createEmptyBorder());
 
-                // Check if searchQuery is not empty and is a valid number (assuming ID is numeric)
-                if (!searchQuery.isEmpty()) {
-                    findPhoneById(searchQuery);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Please enter a valid phone ID.");
-                }
-            }
-
-            private void findPhoneById(String id) {
-                try {
-                    final String url = "http://localhost:8080/phone-trader/phones/read/" + id; // Assuming an endpoint for fetching phone by ID
-                    String responseBody = read(url);
-
-                    // Handle response (assuming response contains a single phone object)
-                    if (!responseBody.startsWith("[")) {
-                        JSONObject phoneJSONObject = new JSONObject(responseBody);
-                        Gson g = new GsonBuilder().create();
-                        Phone phone = g.fromJson(phoneJSONObject.toString(), Phone.class);
-
-                            tableModel.setRowCount(0);
-                            tableModel.addRow(new Object[]{
-                                    phone.getImei(),  // Button text
-                                    phone.getBrand(),
-                                    phone.getModel(),
-                                    phone.getPrice()
-                            });
-
-                    } else {
-                        JOptionPane.showMessageDialog(null, "No phone found with the entered ID.");
-                    }
-                } catch (Exception ex) {
-                    throw new RuntimeException("Failed to fetch phone by ID", ex);
-                }
-            }
-        });
-
-        // Collection button actionListener
-        collectionButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                getAllPhones(tableModel);
-            }
-        });
-
-        // Create table with buttons in the "NO" column
-        String[] columnNames = {"NO", "BRAND", "MODEL", "PRICE"};
-        tableModel = new DefaultTableModel(columnNames, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return column == 0; // Only the "NO" column is editable
-            }
-
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                if (columnIndex == 0) {
-                    return JButton.class; // The "NO" column contains buttons
-                }
-                return super.getColumnClass(columnIndex);
-            }
-        };
-
-        phoneTable = new JTable(tableModel);
-        phoneTable.getColumn("NO").setCellRenderer(new ButtonRenderer());
-        phoneTable.getColumn("NO").setCellEditor(new ButtonEditor(new JCheckBox()));
-
-        JScrollPane scrollPane = new JScrollPane(phoneTable);
-        mainContainer.add(scrollPane, BorderLayout.CENTER);
-        add(mainContainer);
-
-        // Fetch and display phones
-        getAllPhones(tableModel);
-    }
-
-    public static void getAllPhones(DefaultTableModel model) {
-        try {
-            final String url = "http://localhost:8080/phone-trader/phones/getall";
-            String responseBody = read(url);
-
-            if (responseBody.startsWith("[")) {
-                JSONArray phonesArray = new JSONArray(responseBody);
-                model.setRowCount(0);
-                Gson g = new GsonBuilder().create();
-
-                for (int i = 0; i < phonesArray.length(); i++) {
-                    JSONObject phoneJSONObject = phonesArray.getJSONObject(i);
-                    Phone phone = g.fromJson(phoneJSONObject.toString(), Phone.class);
-                    model.addRow(new Object[]{
-                            phone.getImei(),  // Button text
-                            phone.getBrand(),
-                            phone.getModel(),
-                            phone.getPrice()
-                    });
-                }
+            if (i == buttonCount - 1) {
+                gbc.weighty = 1;
+                gbc.anchor = GridBagConstraints.SOUTH;
             } else {
-                System.err.println("Expected a JSON array but got: " + responseBody);
+                gbc.weighty = 0;
+                gbc.anchor = GridBagConstraints.NORTH;
             }
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to fetch phones", e);
-        }
-    }
 
-    private static String read(String url) throws IOException {
-        String token = TokenStorage.getInstance().getToken();
-        Request request = new Request.Builder()
-                .url(url)
-                .header("Authorization", "Bearer " + token)
-                .build();
-        try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                throw new IOException("Unexpected code " + response);
-            }
-            return response.body().string();
-        }
-    }
+            gbc.gridy = i;
+            sidebar.add(button, gbc);
 
-    // ButtonRenderer for the "NO" column
-    private class ButtonRenderer extends JButton implements TableCellRenderer {
-        public ButtonRenderer() {
-            setOpaque(true);
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                                                       boolean isSelected, boolean hasFocus, int row, int column) {
-            setText(value != null ? value.toString() : "");
-            return this;
-        }
-    }
-
-    // ButtonEditor for the "NO" column
-    private class ButtonEditor extends DefaultCellEditor {
-        private JButton button;
-        private String imei;
-        private boolean isPushed;
-
-        public ButtonEditor(JCheckBox checkBox) {
-            super(checkBox);
-            button = new JButton();
-            button.setOpaque(true);
             button.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
-                    fireEditingStopped();
+                    centerPanel.removeAll();
+                    if (button.getText().equals("BUY PHONE")){
+                        purchase();
+                    } else if (button.getText().equals("PHONES")) {
+                        displayInventory();
+                    } else if (button.getText().equals("CUSTOMERS")) {
+                        displayCustomers();
+                    }  else if (button.getText().equals("RETURNS")) {
+                        displayReturns();
+                    } else if (button.getText().equals("LOG OUT")) {
+                        int confirm = JOptionPane.showConfirmDialog(salesPersonDashboard, "Are you sure you want to log out?", "Log Out", JOptionPane.YES_NO_OPTION);
+                        if (confirm == JOptionPane.YES_OPTION) {
+                            jFrame.dispose();
+                            Welcome welcome = new Welcome();
+                            welcome.Welcome();
+                        }
+                    }
+                    centerPanel.revalidate();
+                    centerPanel.repaint();
                 }
             });
         }
 
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value,
-                                                     boolean isSelected, int row, int column) {
-            imei = (value != null) ? value.toString() : "";
-            button.setText(value != null ? value.toString() : "");
-            isPushed = true;
-            return button;
-        }
+        centerPanel = new JPanel();
+        centerPanel.setLayout(new BorderLayout());
+        centerPanel.setBackground(new Color(247, 247, 247));
+        salesPersonDashboard.add(sidebar, BorderLayout.WEST);
+        salesPersonDashboard.add(centerPanel, BorderLayout.CENTER);
 
-        @Override
-        public Object getCellEditorValue() {
-            if (isPushed) {
-                // Navigate to SalesPersonSellPage when the button is clicked
-                try {
-                    ImeiStorage.getInstance().setImei(imei);
-                    SalesPersonSellPage sellPage = new SalesPersonSellPage();
+        displayInventory();
 
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            isPushed = false;
-            return imei;
-        }
+        jFrame.add(salesPersonDashboard);
+        jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        jFrame.setVisible(true);
 
-        @Override
-        public boolean stopCellEditing() {
-            isPushed = false;
-            return super.stopCellEditing();
-        }
-
-        @Override
-        protected void fireEditingStopped() {
-            super.fireEditingStopped();
-        }
+        return jFrame;
     }
 
+    private void purchase(){
+        MerchantDashboard purchase = new MerchantDashboard();
+        centerPanel.removeAll();
+        centerPanel.add(purchase.showDashboard());
+    }
+    private void displayInventory() {
+        PhoneInventory phoneInventory = new PhoneInventory();
+        centerPanel.removeAll();
+        centerPanel.add(phoneInventory.getPhoneInventory());
+    }
+
+    private void displayReturns() {
+        ReturnInventory returnInventory = new ReturnInventory();
+        centerPanel.removeAll();
+        centerPanel.add(returnInventory.getReturn());
+    }
+
+    private void displayProfile() {
+        JFrame frame = new JFrame("Employee Profile");
+        frame.add(new EmployeeProfile());
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setVisible(true);
+        jFrame.dispose();
+    }
+
+    private void displayCustomers() {
+        CustomerPage customers = new CustomerPage();
+        centerPanel.removeAll();
+        centerPanel.add(customers.getCustomers());
+    }
 }
+
+

@@ -97,7 +97,10 @@ public class ReturnInventory {
 
     private void openAddReturn() {
         AddReturnForm addReturnForm = new AddReturnForm();
-        addReturnForm.addForm();
+        mainPanel.removeAll();
+        mainPanel.add(addReturnForm.addForm(), BorderLayout.CENTER);
+        mainPanel.revalidate();
+        mainPanel.repaint();
     }
 
     private void loadAllReturns() {

@@ -88,7 +88,7 @@ public class PhoneInventory {
             centerButton.add(Box.createRigidArea(new Dimension(15, 0)));
 
             mainContainer.add(searchBarPanel, BorderLayout.NORTH);
-            searchBarPanel.add(centerButton, BorderLayout.SOUTH);
+            searchBarPanel.add(centerButton, BorderLayout.CENTER);
             mainContainer.add(buttonPanel, BorderLayout.WEST);
 
             // Iphone button actionListener
