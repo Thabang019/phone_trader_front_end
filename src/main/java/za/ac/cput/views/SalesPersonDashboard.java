@@ -129,9 +129,9 @@ public class SalesPersonDashboard {
     }
 
     private void purchase(){
-        Purchase purchase = new Purchase();
+        MerchantDashboard purchase = new MerchantDashboard();
         centerPanel.removeAll();
-        centerPanel.add(purchase.getPurchase());
+        centerPanel.add(purchase.showDashboard());
     }
     private void displayInventory() {
         PhoneInventory phoneInventory = new PhoneInventory();
