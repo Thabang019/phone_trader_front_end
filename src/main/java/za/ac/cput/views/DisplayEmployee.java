@@ -19,13 +19,13 @@ public class DisplayEmployee {
     private JPanel mainPanel;
     private static DefaultTableModel model;
     private static final OkHttpClient client = new OkHttpClient();
-    public DisplayEmployee(){
+
+    public DisplayEmployee() {
 
         mainPanel = new JPanel(new BorderLayout());
         JPanel topPanel = new JPanel(new BorderLayout());
         JLabel title = new JLabel("EMPLOYEES", JLabel.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 24));
-        //title.setForeground(new Color(192, 0, 0));
         topPanel.add(title, BorderLayout.CENTER);
 
         JPanel centerPanel = new JPanel();
@@ -42,7 +42,6 @@ public class DisplayEmployee {
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
 
-
         JPanel tablePanel = new JPanel(new BorderLayout());
         String[] columns = {"Employee_ID", "First_Name", "Last_Name", "Role", "Email", "Phone_Number"};
 
@@ -56,30 +55,33 @@ public class DisplayEmployee {
         tablePanel.add(scrollPane);
         tablePanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
-
-        JPanel addButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton backButton = new JButton("BACK");
         JButton addButton = new JButton("ADD EMPLOYEE");
+        JButton deleteButton = new JButton("DELETE EMPLOYEE"); // Delete button added
         backButton.setBackground(new Color(192, 0, 0));
         backButton.setForeground(Color.WHITE);
         backButton.setFont(new Font("Arial", Font.BOLD, 14));
         addButton.setBackground(new Color(192, 0, 0));
         addButton.setForeground(Color.WHITE);
         addButton.setFont(new Font("Arial", Font.BOLD, 14));
-        addButtonPanel.add(addButton);
+        deleteButton.setBackground(new Color(192, 0, 0)); // Delete button style
+        deleteButton.setForeground(Color.WHITE);
+        deleteButton.setFont(new Font("Arial", Font.BOLD, 14));
 
+        buttonPanel.add(addButton);
+        buttonPanel.add(deleteButton); // Add delete button to panel
 
         centerPanel.add(searchPanel);
         centerPanel.add(tablePanel);
-        centerPanel.add(addButtonPanel);
-
+        centerPanel.add(buttonPanel);
 
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 openManagerDashboard();
-
-            }});
+            }
+        });
 
         addButton.addActionListener(new ActionListener() {
             @Override
@@ -88,50 +90,77 @@ public class DisplayEmployee {
             }
         });
 
+        deleteButton.addActionListener(new ActionListener() { // Delete button action
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteEmployee();
+            }
+        });
+
         mainPanel.add(topPanel, BorderLayout.NORTH);
         mainPanel.add(centerPanel);
 
-        
         getAll();
     }
 
-    public JPanel getDisplayEmployee(){
+    public JPanel getDisplayEmployee() {
         return mainPanel;
     }
 
-
-
     private void openRegistration() {
-
         Registration registrationForm = new Registration();
         registrationForm.Registration();
-
     }
+
     private void openManagerDashboard() {
         ManagerDashboard dashboard = new ManagerDashboard();
         dashboard.ManagerDashboard();
-
     }
 
+    // Delete Employee functionality
+    private void deleteEmployee() {
+        String employeeID = JOptionPane.showInputDialog(mainPanel, "Enter Employee ID to delete:", "Delete Employee", JOptionPane.WARNING_MESSAGE);
+        if (employeeID != null && !employeeID.trim().isEmpty()) {
+            try {
+                final String url = "http://localhost:8080/phone-trader/employee/delete/" + employeeID;
+                delete(url);
+                JOptionPane.showMessageDialog(mainPanel, "Employee deleted successfully!");
+                model.setRowCount(0); // Clear the table
+                getAll(); // Refresh the table
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(mainPanel, "Failed to delete employee: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private static void delete(String url) throws IOException {
+        String token = TokenStorage.getInstance().getToken();
+        Request request = new Request.Builder()
+                .url(url)
+                .delete()
+                .header("Authorization", "Bearer " + token)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("Unexpected code " + response);
+            }
+        }
+    }
 
     public static void getAll() {
         try {
             final String url = "http://localhost:8080/phone-trader/employee/getAll";
-
             String responseBody = read(url);
 
             if (responseBody.startsWith("[")) {
                 JSONArray employees = new JSONArray(responseBody);
-                Gson g = new GsonBuilder()
-                        .create();
+                Gson g = new GsonBuilder().create();
                 for (int i = 0; i < employees.length(); i++) {
                     JSONObject employeesJSONObject = employees.getJSONObject(i);
                     Employee emp = g.fromJson(employeesJSONObject.toString(), Employee.class);
-
-                    model.addRow(new Object[]{emp.getEmployeeID(),
-                            emp.getFirstName(), emp.getLastName(),
-                            emp.getRole(), emp.getContact().getEmail(),
-                            emp.getContact().getPhoneNumber()});
+                    model.addRow(new Object[]{emp.getEmployeeID(), emp.getFirstName(), emp.getLastName(), emp.getRole(),
+                            emp.getContact().getEmail(), emp.getContact().getPhoneNumber()});
                 }
             } else {
                 System.err.println("Expected a JSON array but got: " + responseBody);
@@ -155,5 +184,4 @@ public class DisplayEmployee {
             return response.body().string();
         }
     }
-
 }
