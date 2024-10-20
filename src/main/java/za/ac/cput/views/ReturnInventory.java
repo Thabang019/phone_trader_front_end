@@ -36,8 +36,10 @@ public class ReturnInventory {
     public ReturnInventory() {
 
         mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(new Color(247, 247, 247));
 
         JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(new Color(247, 247, 247));
         JLabel titleLabel = new JLabel("Returns Inventory", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         topPanel.add(titleLabel, BorderLayout.CENTER);
@@ -45,6 +47,7 @@ public class ReturnInventory {
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
         JPanel centerPanel = new JPanel();
+        centerPanel.setBackground(new Color(247, 247, 247));
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
@@ -59,6 +62,7 @@ public class ReturnInventory {
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(new Color(247, 247, 247));
         JButton backButton = new JButton("BACK");
         JButton addReturnButton = new JButton("ADD RETURN");
 

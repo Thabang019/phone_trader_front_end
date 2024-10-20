@@ -24,15 +24,18 @@ public class DisplayEmployee {
 
         mainPanel = new JPanel(new BorderLayout());
         JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(new Color(247, 247, 247));
         JLabel title = new JLabel("EMPLOYEES", JLabel.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 24));
         topPanel.add(title, BorderLayout.CENTER);
 
         JPanel centerPanel = new JPanel();
+        centerPanel.setBackground(new Color(247, 247, 247));
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        searchPanel.setBackground(new Color(247, 247, 247));
         JLabel label = new JLabel("Find Employee By Employee ID");
         JTextField searchField = new JTextField(20);
         JButton searchButton = new JButton("Search");
@@ -43,6 +46,7 @@ public class DisplayEmployee {
         searchPanel.add(searchButton);
 
         JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel.setBackground(new Color(247, 247, 247));
         String[] columns = {"Employee_ID", "First_Name", "Last_Name", "Role", "Email", "Phone_Number"};
 
         model = new DefaultTableModel(columns, 0);
@@ -56,6 +60,7 @@ public class DisplayEmployee {
         tablePanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(new Color(247, 247, 247));
         JButton backButton = new JButton("BACK");
         JButton addButton = new JButton("ADD EMPLOYEE");
         JButton deleteButton = new JButton("DELETE EMPLOYEE"); // Delete button added

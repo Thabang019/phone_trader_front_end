@@ -214,9 +214,12 @@ public class SalesPersonSellPage extends JFrame {
                     Buyer buyer = BuyerFactory.createBuyer(idNumber,firstName, middleName, lastName,contact, saleList);
                     System.out.println(buyer);
 
+                    Phone updatePhone = new Phone.Builder().copy(phone).setStatus("sold").build();
                     String response = null;
                     try {
                         response = createBuyer("http://localhost:8080/phone-trader/buyer/save", buyer);
+                        response = updatePhoneStatus("http://localhost:8080/phone-trader/phones/update", updatePhone);
+
                         System.out.println(response);
                         JOptionPane.showMessageDialog(sellButton, "Phone sold!");
                     } catch (IOException ex) {
@@ -271,6 +274,11 @@ public class SalesPersonSellPage extends JFrame {
 
     public String createBuyer(String url, Buyer buyer) throws IOException {
         String json = gson.toJson(buyer);
+        return post(url, json);
+    }
+
+    public String updatePhoneStatus(String url, Phone phone) throws IOException {
+        String json = gson.toJson(phone);
         return post(url, json);
     }
 

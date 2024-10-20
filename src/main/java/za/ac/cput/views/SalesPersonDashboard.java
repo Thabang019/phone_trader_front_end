@@ -36,10 +36,12 @@ public class SalesPersonDashboard extends JFrame {
 
         // Create the main container
         JPanel mainContainer = new JPanel(new BorderLayout(20, 20));
+        mainContainer.setBackground(new Color(247, 247, 247));
         mainContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Search bar panel
         JPanel searchBarPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        searchBarPanel.setBackground(new Color(247, 247, 247));
         searchField = new JTextField(20);
         JButton searchButton = new JButton("Search");
         searchButton.setBackground(new Color(192, 0, 0));
@@ -56,6 +58,7 @@ public class SalesPersonDashboard extends JFrame {
 
         // Filter buttons panel
         JPanel buttonPanel = new JPanel(new BorderLayout());
+        buttonPanel.setBackground(new Color(247, 247, 247));
         JPanel centerButton = new JPanel();
         centerButton.setLayout(new BoxLayout(centerButton, BoxLayout.Y_AXIS));
         JButton iphoneButton = new JButton("iPhone");
