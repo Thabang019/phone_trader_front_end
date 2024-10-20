@@ -214,12 +214,14 @@ public class SalesPersonSellPage extends JFrame {
                     Buyer buyer = BuyerFactory.createBuyer(idNumber,firstName, middleName, lastName,contact, saleList);
                     System.out.println(buyer);
 
+                    Employee emp = new Employee.Builder().copy(EmployeeStorage.getInstance().getEmployee()).setPassword(EmployeeStorage.getInstance().getEmployee().getPassword()).build();
                     Phone updatePhone = new Phone.Builder().copy(phone).setStatus("sold").build();
                     String response = null;
+
                     try {
                         response = createBuyer("http://localhost:8080/phone-trader/buyer/save", buyer);
-                        response = updatePhoneStatus("http://localhost:8080/phone-trader/phones/update", updatePhone);
-
+                        String respo = updatePhoneStatus("http://localhost:8080/phone-trader/phones/update", updatePhone);
+                        String reply = createEmployee("http://localhost:8080/phone-trader/employee/update", emp);
                         System.out.println(response);
                         JOptionPane.showMessageDialog(sellButton, "Phone sold!");
                     } catch (IOException ex) {
@@ -274,6 +276,11 @@ public class SalesPersonSellPage extends JFrame {
 
     public String createBuyer(String url, Buyer buyer) throws IOException {
         String json = gson.toJson(buyer);
+        return post(url, json);
+    }
+
+    public String createEmployee(String url, Employee employee) throws IOException {
+        String json = gson.toJson(employee);
         return post(url, json);
     }
 

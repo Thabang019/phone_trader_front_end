@@ -266,7 +266,7 @@ public class PhoneInventory {
 
                     for (int i = 0; i < phonesArray.length(); i++) {
                         JSONObject phoneJSONObject = phonesArray.getJSONObject(i);
-                        if(phoneJSONObject.toString().contains("unsold")) {
+                        if(phoneJSONObject.toString().contains("available")) {
                             Phone phone = g.fromJson(phoneJSONObject.toString(), Phone.class);
                             model.addRow(new Object[]{
                                     phone.getImei(),  // Button text

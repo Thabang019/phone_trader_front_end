@@ -17,6 +17,7 @@ import za.ac.cput.util.LocalDateTypeAdapter;
 import za.ac.cput.util.LocalTimeTypeAdapter;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -97,7 +98,11 @@ public class MerchantDashboard {
                             System.out.println(phone);
 
                             Address address = AddressFactory.buildAddress( streetNumberField.getText(), streetNameField.getText(), suburbField.getText(), cityField.getText(), postalCodeField.getText());
-                            Contact contact = ContactFactory.createContact(emailField.getText(), phoneNumberField.getText(), altPhoneField.getText(),address);
+
+                            Contact contact = ContactFactory.createContact(phoneNumberField.getText(),emailField.getText(),altPhoneField.getText(),address);
+
+                            System.out.println(address);
+                            System.out.println(contact);
 
                             Purchase purchase = PurchaseFactory.createPurchase(LocalDate.now(), LocalTime.now(), EmployeeStorage.getInstance().getEmployee(), 1200, "cash", phone);
                             ArrayList<Purchase> purchaseList = new ArrayList<>();
@@ -107,10 +112,10 @@ public class MerchantDashboard {
                             Seller seller = SellerFactory.createSeller(idField.getText(), firstNameField.getText(), middleNameField.getText(), lastNameField.getText(),contact, purchaseList);
                             System.out.println(seller);
 
+                            Employee emp = new Employee.Builder().copy(EmployeeStorage.getInstance().getEmployee()).setPassword(EmployeeStorage.getInstance().getEmployee().getPassword()).build();
                             String response = createSeller("http://localhost:8080/phone-trader/seller/save", seller );
                             System.out.println(response);
-
-                            System.out.println(gson);
+                            String reply = createEmployee("http://localhost:8080/phone-trader/employee/update", emp);
 
                             JOptionPane.showMessageDialog(dashboardPanel, "Purchase successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         } catch (Exception ex) {
@@ -210,8 +215,8 @@ public class MerchantDashboard {
        boolean isValid = true;
 
        Component[] components = ((Container) dashboardPanel.getComponent(0)).getComponents();
-       isValid = isValid((JPanel) components[0], true);
-       isValid = isValid((JPanel) components[1], isValid);
+       //isValid = isValid((JPanel) components[0], true);
+       //isValid = isValid((JPanel) components[1], isValid);
 
        if (!isValid) {
            JOptionPane.showMessageDialog(dashboardPanel, "Please fill in all required fields.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -237,6 +242,11 @@ public class MerchantDashboard {
 
     public String createSeller(String url, Seller seller) throws IOException {
         String json = gson.toJson(seller);
+        return post(url, json);
+    }
+
+    public String createEmployee(String url, Employee employee) throws IOException {
+        String json = gson.toJson(employee);
         return post(url, json);
     }
 
