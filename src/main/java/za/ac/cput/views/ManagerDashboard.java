@@ -67,7 +67,7 @@ public class ManagerDashboard {
         gbc.insets = new Insets(10, 0, 10, 0);
         gbc.gridx = 0;
 
-        String[] buttonNames = {"PHONES", "CUSTOMERS", "EMPLOYEES", "PURCHASES & SALES", "RETURNS", "LOG OUT"};
+        String[] buttonNames = {"BUY PHONE", "PHONES", "CUSTOMERS", "EMPLOYEES", "PURCHASES & SALES", "RETURNS", "LOG OUT"};
         int buttonCount = buttonNames.length;
 
         for (int i = 0; i < buttonCount; i++) {
@@ -91,7 +91,9 @@ public class ManagerDashboard {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     centerPanel.removeAll();
-                    if (button.getText().equals("PHONES")) {
+                    if (button.getText().equals("BUY PHONE")) {
+                        purchase();
+                    }else if (button.getText().equals("PHONES")) {
                         displayInventory();
                     } else if (button.getText().equals("CUSTOMERS")) {
                         displayCustomers();
@@ -128,6 +130,12 @@ public class ManagerDashboard {
         jFrame.setVisible(true);
 
         return jFrame;
+    }
+
+    private void purchase(){
+        MerchantDashboard purchase = new MerchantDashboard();
+        centerPanel.removeAll();
+        centerPanel.add(purchase.showDashboard());
     }
 
     private void displayPurchasesAndSales() {
